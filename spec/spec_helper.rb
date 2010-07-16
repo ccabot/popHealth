@@ -6,6 +6,8 @@ require 'spec'
 require 'spec/rails'
 require File.expand_path(File.dirname(__FILE__) + '/laika_spec_helper')
 
+require 'rexml/document'
+
 ModelFactory.configure do
   default(Setting) do
     name  { |i| "factory setting #{i}" }
