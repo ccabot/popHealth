@@ -1,4 +1,5 @@
 require 'ui/grid'
+require 'cgi'
 
 class PatientsController < ApplicationController
 
@@ -70,7 +71,7 @@ class PatientsController < ApplicationController
         end
       end
     
-    @return = CGI.unescape(params[:return])
+    @return = CGI.unescape(params[:return] || "")
     @ret =  (params[:return].nil? ? "/patients/list/?" : "#{@return}&amp;")
     @ret = @ret + "report_id=" + @report_id
     
