@@ -28,9 +28,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :login_required
 
-  # See ActionController::RequestForgeryProtection for details
-  protect_from_forgery :secret => 'dece9bb4d13101130349c3bef2c45b37'
-  
   protected
 
   # Set the last selected vendor by id. The value is saved in the session.
