@@ -79,7 +79,6 @@ Rails::Initializer.run do |config|
   config.gem 'faker',                :version => '0.3.1'
   config.gem 'calendar_date_select', :version => '1.15'
   config.gem 'mislav-will_paginate', :version => '>= 2.3.6', :lib => 'will_paginate', :source => 'http://gems.github.com'
-  #config.gem 'CCHIT-xds-facade', :lib => 'xds-facade', :version => '>= 0.1.1', :source => 'http://gems.github.com'
 
   config.gem 'uuid', :version => '2.0.1'
 
@@ -88,6 +87,7 @@ Rails::Initializer.run do |config|
   config.gem 'rspec',       :lib => false, :version => '>= 1.2.2'
   config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.2'
   config.gem 'json_pure', :lib => 'json', :version => '>= 1.4.3'
+  config.gem 'CCHIT-xds-facade', :lib => 'xds-facade', :version => '>= 0.1.1', :source => 'http://gems.github.com'
 
   config.gem 'state_machine'
 
