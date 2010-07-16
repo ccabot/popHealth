@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   attr_accessor :description
   
   def initialize
-    inline_javascript = ""
+    @inline_javascript = ""
     #todo: put this information in an about page.
     # keywords and descriptions should always be relevant to actual content on the page.
     # search engines usually decrease your validity for having keywords that do not occur in the content. 
