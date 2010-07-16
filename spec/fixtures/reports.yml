@@ -118,12 +118,12 @@ bp1:
   numerator_query: "--- \n\
     :influenza_vaccine: \n\
     - \"Yes\"\n"
-  title: Influenza Vaccination
+  title: "ABCS: BP Control 1"
   denominator_query: "--- \n\
-    :hypertension: \n\
-    - \"Yes\"\n\
     :ischemic_vascular_disease: \n\
     - \"No\"\n\
+    :hypertension: \n\
+    - \"Yes\"\n\
     :age: \n\
     - 18-30\n\
     - 30-40\n\

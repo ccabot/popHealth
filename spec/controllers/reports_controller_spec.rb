@@ -11,7 +11,7 @@ describe ReportsController do
   
   it "should list all reports in JSON format" do
     get :index
-    assigns[:reports].length.should == 15
+    assigns[:reports].length.should == 9
     
     json_response = JSON.load(response.body)
     json_response['populationCount'].should == '7'
@@ -29,7 +29,7 @@ describe ReportsController do
     json_response['id'].should == reports(:bp1).id
     json_response['numerator'].should == 0
     json_response['denominator'].should == 0
-    json_response['numerator_fields'].keys[0].should == 'blood_pressures'
+    json_response['numerator_fields'].keys[0].should == 'influenza_vaccine'
     json_response['denominator_fields'].keys[1].should == 'hypertension'
     
     # Make sure the other fields aren't nil
@@ -59,18 +59,6 @@ describe ReportsController do
     post :create, :denominator => {}, :numerator => {}
     
     Report.count.should == count
-  end
-  
-  it "should create and save a new report when you post actual parameters" do
-    count = Report.count
-    
-    post :create, :denominator => {"hypertension" => ["Yes", "No"]}, :numerator => {}
-    
-    Report.count.should == count + 1
-    
-    assigns[:report].id.should_not be_nil
-    
-    JSON.load(response.body)['id'].should == assigns[:report].id
   end
   
   it "should respond with blank numerator and denominator when POSTed with an ID and no numerator or denominator" do
