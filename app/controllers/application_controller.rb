@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
     if current_user.try(:administrator?)
       true
     else
-      redirect_to test_plans_url
+      redirect_to pophealth_index_url
       false
     end
   end
