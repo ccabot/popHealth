@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/users/edit.html.erb" do
-  include UsersHelper
+  # include UsersHelper
   
   before do
     @user = User.new(

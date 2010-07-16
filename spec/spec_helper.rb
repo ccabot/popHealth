@@ -57,18 +57,26 @@ ModelFactory.configure do
     user { User.factory.create }
   end
 
-  default(TestPlan) do
-    patient { Patient.factory.create }
-    user { User.factory.create }
-    vendor { Vendor.factory.create }
-  end
+  # commented out 2010-07-15 ccabot while i was thrashing around
+  # figuring out how stuff works.  there's no test_plan.rb and it was
+  # causing "rake spec" to crash.
 
-  default(XdsProvideAndRegisterPlan) do
-    patient { Patient.factory.create }
-    user { User.factory.create }
-    vendor { Vendor.factory.create }
-    test_type_data { XDS::Metadata.new }
-  end
+  # default(TestPlan) do
+  #   patient { Patient.factory.create }
+  #   user { User.factory.create }
+  #   vendor { Vendor.factory.create }
+  # end
+
+  # commented out 2010-07-15 ccabot while i was thrashing around
+  # figuring out how stuff works.  there's no test_plan.rb and it was
+  # causing "rake spec" to crash.
+
+  # default(XdsProvideAndRegisterPlan) do
+  #   patient { Patient.factory.create }
+  #   user { User.factory.create }
+  #   vendor { Vendor.factory.create }
+  #   test_type_data { XDS::Metadata.new }
+  # end
 
   default(ClinicalDocument) do
     size { 256 }
