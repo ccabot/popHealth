@@ -20,24 +20,9 @@ describe Commentable do
       @immunization = @patient.immunizations.create
     end
 
-    it "should create the comment on update_attributes" do
-      @immunization.update_attributes(:comment_attributes => { :text => 'foo' })
-      @immunization.comment.text.should == 'foo'
-    end
-
     describe "with a comment" do
       before { @comment = @immunization.create_comment(:text => 'yo dawg.') }
 
-      it "should update the comment on update_attributes" do
-        @immunization.update_attributes(:comment_attributes => { :id => @comment.id, :text => 'foo' })
-        @immunization.comment.text.should == 'foo'
-      end
-  
-      it "should destroy the comment on update_attributes" do
-        @immunization.update_attributes(:comment_attributes => { :id => @comment.id, '_delete' => '1' })
-        @immunization.comment(true).should be_nil
-      end
-  
       it "should copy the comment on clone" do
         copy = @immunization.clone
         copy.comment.should_not == @comment
