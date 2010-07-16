@@ -66,50 +66,6 @@ relationships religions abstract_results result_type_codes role_class_relationsh
 severity_terms supports telecoms users vaccines vendors zip_codes
   ]
 
-  [ :david_carter, :emily_jones, :jennifer_thompson, :theodore_smith, :joe_smith, :will_haynes ].each do |patient|
-    it "should round-trip validate #{patient} without errors or warnings" do
-      record = patients(patient)
-      document = REXML::Document.new(record.to_c32)
-      record.validate_c32(document).should be_empty
-    end
-  end
-
-  it "should validate different patients with errors" do
-    patient1 = patients(:david_carter)
-    patient2 = patients(:joe_smith)
-    document1 = REXML::Document.new(patient1.to_c32)
-    document2 = REXML::Document.new(patient2.to_c32)
-
-    # validate themselves (no errors)
-    patient1.validate_c32(document1).should be_empty
-    patient2.validate_c32(document2).should be_empty
-
-    # validate each other (has errors)
-    patient2.validate_c32(document1).should_not be_empty
-    patient1.validate_c32(document2).should_not be_empty
-  end
-
-  it "should fail to validate when medication entries differ" do
-    pending "SF ticket 2101046"
-    record = patients(:jennifer_thompson)
-    document = REXML::Document.new(record.to_c32)
-    record.medications.clear
-    record.validate_c32(document).should_not be_empty
-  end
-
-  it "should validate identical patients with 3 conditions" do
-    record = patients(:joe_smith)
-    record.conditions.clear
-    3.times do |i|
-      record.conditions << Condition.new(
-        :start_event => Date.today + i,
-        :free_text_name => "condition #{i}",
-        :problem_type => ProblemType.find(:first)
-      )
-    end
-    document = REXML::Document.new(record.to_c32)
-    record.validate_c32(document).should be_empty
-  end
 
   it "should refresh updated_at when a child record is updated" do
     record = patients(:david_carter)

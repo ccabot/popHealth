@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 module LaikaSpecHelper
   # Helps easily build a C32 document. A builder object will be pased into the block passed into the object
   # Will puts the full XML doc if debug is set to true when called
