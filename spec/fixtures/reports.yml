@@ -113,3 +113,22 @@ flu:
     - 60-70\n\
     - 70-80\n\
     - 80+\n"
+
+bp1:
+  numerator_query: "--- \n\
+    :influenza_vaccine: \n\
+    - \"Yes\"\n"
+  title: Influenza Vaccination
+  denominator_query: "--- \n\
+    :hypertension: \n\
+    - \"Yes\"\n\
+    :ischemic_vascular_disease: \n\
+    - \"No\"\n\
+    :age: \n\
+    - 18-30\n\
+    - 30-40\n\
+    - 40-50\n\
+    - 50-60\n\
+    - 60-70\n\
+    - 70-80\n\
+    - 80+\n"
