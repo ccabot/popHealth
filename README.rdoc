@@ -38,7 +38,7 @@ Install the rest of the gem dependencies; from the root of your popHealth projec
 Make sure your local database server is running and create a new user *poplaika* with password *poplaika* and a new database/schema called *poplaika*. Find the database.yml.template file in laika/config under your local popHealth project and edit it to include your database settings, for example:
 
   development:
-   adapter: jdbcpostgresql
+   adapter: postgresql
    database: poplaika
    host: localhost
    port: 5432
