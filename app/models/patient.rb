@@ -31,8 +31,8 @@ class Patient
   # dependent because results and vital_signs already do that.
   has_many :all_results, :class_name => 'AbstractResult'
 
-  named_scope :templates, :conditions => { :test_plan_id => nil, :user_id => nil }
-  named_scope :owned_by, lambda { |user|
+  scope :templates, :conditions => { :test_plan_id => nil, :user_id => nil }
+  scope :owned_by, lambda { |user|
     { :conditions => { :test_plan_id => nil, :user_id => user.id } }
   }
 
