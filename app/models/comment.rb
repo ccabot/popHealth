@@ -2,7 +2,6 @@ class Comment
   include MongoMapper::Document
 
 
-  strip_attributes!
 
   belongs_to :commentable, :polymorphic => true
 

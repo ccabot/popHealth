@@ -2,7 +2,6 @@ class PersonName
   include MongoMapper::Document
 
 
-  strip_attributes!
 
   belongs_to :nameable, :polymorphic => true
 

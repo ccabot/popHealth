@@ -2,7 +2,6 @@ class Medication
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :medication_type
   belongs_to :code_system

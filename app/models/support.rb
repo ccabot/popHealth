@@ -2,7 +2,6 @@ class Support
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :contact_type
   belongs_to :relationship

@@ -2,7 +2,6 @@ class InsuranceProviderSubscriber
   include MongoMapper::Document
 
 
-  strip_attributes!
 
   include InsuranceProviderChild
 

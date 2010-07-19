@@ -2,7 +2,6 @@ class InformationSource
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   include PatientChild
   include PersonLike

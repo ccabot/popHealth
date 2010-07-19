@@ -2,7 +2,6 @@ class Address
   include MongoMapper::Document
 
 
-  strip_attributes!
 
   belongs_to :iso_country
   belongs_to :iso_state

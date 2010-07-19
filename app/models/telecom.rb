@@ -7,7 +7,6 @@ class Telecom
   include MongoMapper::Document
 
 
-  strip_attributes!
 
   # AG: did you expect telecomable? ;-)
   # RM: yes... yes I did...

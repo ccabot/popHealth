@@ -2,7 +2,6 @@ class Immunization
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :vaccine
   belongs_to :no_immunization_reason

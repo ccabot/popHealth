@@ -2,7 +2,6 @@ class SocialHistory
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :social_history_type
 

@@ -2,7 +2,6 @@ class InsuranceProvider
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :insurance_type
   belongs_to :coverage_role_type

@@ -13,7 +13,6 @@ class AbstractResult
     super(*args)
   end
 
-  strip_attributes!
 
   belongs_to :code_system
   belongs_to :loinc_lab_code

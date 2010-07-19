@@ -2,7 +2,6 @@ class RegistrationInformation
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :race
   belongs_to :ethnicity

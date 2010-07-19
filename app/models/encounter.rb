@@ -2,7 +2,6 @@ class Encounter
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :encounter_type
   belongs_to :encounter_location_code

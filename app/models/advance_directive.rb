@@ -2,7 +2,6 @@ class AdvanceDirective
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :advance_directive_type
   belongs_to :advance_directive_status_code

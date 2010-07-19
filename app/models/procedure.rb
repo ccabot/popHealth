@@ -1,7 +1,6 @@
 class Procedure
   include MongoMapper::EmbeddedDocument
 
-  strip_attributes!
   
   belongs_to :procedure_status_code
 

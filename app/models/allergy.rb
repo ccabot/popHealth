@@ -2,7 +2,6 @@ class Allergy
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :adverse_event_type
   belongs_to :severity_term

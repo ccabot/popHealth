@@ -2,7 +2,6 @@ class Provider
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :provider_type
   belongs_to :provider_role

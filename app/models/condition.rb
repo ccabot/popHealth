@@ -2,7 +2,6 @@ class Condition
   include MongoMapper::EmbeddedDocument
 
 
-  strip_attributes!
 
   belongs_to :problem_type
 
