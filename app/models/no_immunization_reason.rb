@@ -1,4 +1,6 @@
-class NoImmunizationReason < ActiveRecord::Base
+class NoImmunizationReason
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

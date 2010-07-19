@@ -1,4 +1,6 @@
-class Support < ActiveRecord::Base
+class Support
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

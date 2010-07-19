@@ -1,4 +1,6 @@
-class InsuranceProviderSubscriber < ActiveRecord::Base
+class InsuranceProviderSubscriber
+  include MongoMapper::Document
+
 
   strip_attributes!
 

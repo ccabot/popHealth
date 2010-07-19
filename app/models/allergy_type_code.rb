@@ -1,3 +1,5 @@
-class AllergyTypeCode < ActiveRecord::Base
+class AllergyTypeCode
+  include MongoMapper::Document
+
   extend RandomFinder
 end

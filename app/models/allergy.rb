@@ -1,4 +1,6 @@
-class Allergy < ActiveRecord::Base
+class Allergy
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

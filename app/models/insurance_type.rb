@@ -1,4 +1,6 @@
-class InsuranceType < ActiveRecord::Base
+class InsuranceType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 end

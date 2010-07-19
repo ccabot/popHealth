@@ -1,3 +1,5 @@
-class ZipCode < ActiveRecord::Base
+class ZipCode
+  include MongoMapper::Document
+
   extend RandomFinder
 end

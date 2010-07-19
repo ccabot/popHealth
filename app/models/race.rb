@@ -1,4 +1,6 @@
-class Race < ActiveRecord::Base
+class Race
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

@@ -1,4 +1,6 @@
-class Report < ActiveRecord::Base
+class Report
+  include MongoMapper::Document
+
   
   attr_accessor :numerator_request
 

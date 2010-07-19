@@ -1,4 +1,6 @@
-class MedicationType < ActiveRecord::Base
+class MedicationType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 end

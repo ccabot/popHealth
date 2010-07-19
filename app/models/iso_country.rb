@@ -1,4 +1,6 @@
-class IsoCountry < ActiveRecord::Base
+class IsoCountry
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 end

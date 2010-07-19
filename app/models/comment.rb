@@ -1,4 +1,6 @@
-class Comment < ActiveRecord::Base
+class Comment
+  include MongoMapper::Document
+
 
   strip_attributes!
 

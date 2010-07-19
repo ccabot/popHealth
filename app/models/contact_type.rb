@@ -1,4 +1,6 @@
-class ContactType < ActiveRecord::Base
+class ContactType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 end

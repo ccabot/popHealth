@@ -1,3 +1,5 @@
-class SnowmedProblem < ActiveRecord::Base
+class SnowmedProblem
+  include MongoMapper::Document
+
   extend RandomFinder
 end

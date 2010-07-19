@@ -1,4 +1,6 @@
-class LoincLabCode < ActiveRecord::Base
+class LoincLabCode
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

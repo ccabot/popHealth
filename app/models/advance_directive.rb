@@ -1,4 +1,6 @@
-class AdvanceDirective < ActiveRecord::Base
+class AdvanceDirective
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

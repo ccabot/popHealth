@@ -1,7 +1,9 @@
 # This is the base class for Result and VitalSign. You can use this class to
 # find objects of either type, but you can only create new instances using
 # Result and VitalSign.
-class AbstractResult < ActiveRecord::Base
+class AbstractResult
+  include MongoMapper::Document
+
 
   class AbstractInstantiationError < StandardError; end
   def self.new(*args)

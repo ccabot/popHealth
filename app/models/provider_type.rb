@@ -1,4 +1,6 @@
-class ProviderType < ActiveRecord::Base
+class ProviderType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

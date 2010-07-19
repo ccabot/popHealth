@@ -1,4 +1,6 @@
-class AdverseEventType < ActiveRecord::Base
+class AdverseEventType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
       

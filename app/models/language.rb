@@ -1,4 +1,6 @@
-class Language < ActiveRecord::Base
+class Language
+  include MongoMapper::EmbeddedDocument
+
 
   belongs_to :iso_country
   belongs_to :iso_language

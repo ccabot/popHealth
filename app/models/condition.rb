@@ -1,4 +1,6 @@
-class Condition < ActiveRecord::Base
+class Condition
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

@@ -1,4 +1,6 @@
-class ClinicalDocument < ActiveRecord::Base
+class ClinicalDocument
+  include MongoMapper::Document
+
 
   has_attachment :content_type => 'text/xml', 
                  :storage => :file_system, 

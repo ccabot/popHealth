@@ -1,4 +1,6 @@
-class Address < ActiveRecord::Base
+class Address
+  include MongoMapper::Document
+
 
   strip_attributes!
 

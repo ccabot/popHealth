@@ -1,4 +1,6 @@
-class SocialHistory < ActiveRecord::Base
+class SocialHistory
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

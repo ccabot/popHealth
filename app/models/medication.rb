@@ -1,4 +1,6 @@
-class Medication < ActiveRecord::Base
+class Medication
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

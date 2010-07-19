@@ -1,4 +1,6 @@
-class Vendor < ActiveRecord::Base
+class Vendor
+  include MongoMapper::Document
+
   has_select_options(:order => 'user_id ASC, public_id ASC') {|r| [ r.public_id, r.id ] }
 
   belongs_to :user

@@ -1,4 +1,6 @@
-class PersonName < ActiveRecord::Base
+class PersonName
+  include MongoMapper::Document
+
 
   strip_attributes!
 

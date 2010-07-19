@@ -1,4 +1,6 @@
-class SeverityTerm < ActiveRecord::Base
+class SeverityTerm
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

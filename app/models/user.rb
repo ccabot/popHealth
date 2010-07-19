@@ -1,6 +1,8 @@
 require 'digest/sha1'
 
-class User < ActiveRecord::Base
+class User
+  include MongoMapper::Document
+
   has_select_options(:label_column => :display_name, :order => 'last_name ASC, first_name ASC')
 
   # Virtual attribute for the unencrypted password

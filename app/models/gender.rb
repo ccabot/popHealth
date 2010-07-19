@@ -1,4 +1,6 @@
-class Gender < ActiveRecord::Base
+class Gender
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

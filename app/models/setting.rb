@@ -1,4 +1,6 @@
-class Setting < ActiveRecord::Base
+class Setting
+  include MongoMapper::Document
+
   def to_s; name; end
 
   def self.[] name

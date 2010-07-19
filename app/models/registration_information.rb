@@ -1,4 +1,6 @@
-class RegistrationInformation < ActiveRecord::Base
+class RegistrationInformation
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

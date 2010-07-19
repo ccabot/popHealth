@@ -1,4 +1,6 @@
-class MedicalEquipment < ActiveRecord::Base
+class MedicalEquipment
+  include MongoMapper::EmbeddedDocument
+
   strip_attributes!
 
   include PatientChild

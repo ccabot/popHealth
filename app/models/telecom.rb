@@ -3,7 +3,9 @@
 # rolled the common ones into a single record. This should
 # make validation easier when dealing with phone numbers
 # vs. email addresses
-class Telecom < ActiveRecord::Base
+class Telecom
+  include MongoMapper::Document
+
 
   strip_attributes!
 

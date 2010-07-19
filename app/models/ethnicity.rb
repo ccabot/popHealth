@@ -1,4 +1,6 @@
-class Ethnicity < ActiveRecord::Base
+class Ethnicity
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

@@ -1,4 +1,6 @@
-class EncounterType < ActiveRecord::Base
+class EncounterType
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 

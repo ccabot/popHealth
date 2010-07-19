@@ -1,4 +1,6 @@
-class Provider < ActiveRecord::Base
+class Provider
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

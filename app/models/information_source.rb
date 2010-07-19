@@ -1,4 +1,6 @@
-class InformationSource < ActiveRecord::Base
+class InformationSource
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

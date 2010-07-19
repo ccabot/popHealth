@@ -1,7 +1,12 @@
+require 'has_c32_component'
+
 #
 # This is the central record representing patient data.
 #
-class Patient < ActiveRecord::Base
+class Patient
+  include MongoMapper::Document
+  extend HasC32ComponentExtension
+
   has_many_c32 :languages
   has_many_c32 :providers
   has_many_c32 :medications

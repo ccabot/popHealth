@@ -1,4 +1,6 @@
-class PatientIdentifier < ActiveRecord::Base
+class PatientIdentifier
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

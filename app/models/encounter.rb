@@ -1,4 +1,6 @@
-class Encounter < ActiveRecord::Base
+class Encounter
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

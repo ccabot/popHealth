@@ -1,4 +1,6 @@
-class Immunization < ActiveRecord::Base
+class Immunization
+  include MongoMapper::EmbeddedDocument
+
 
   strip_attributes!
 

@@ -1,4 +1,6 @@
-class Vaccine < ActiveRecord::Base
+class Vaccine
+  include MongoMapper::Document
+
   extend RandomFinder
   has_select_options
 
