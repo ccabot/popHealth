@@ -1,6 +1,6 @@
 dr_dem_bones:
-  start_service: 1977-03-23
-  end_service: 1987-03-23
+  start_service: 1977-03-23 00:00:00 -00:00
+  end_service: 1987-03-23 00:00:00 -00:00
   provider_type: allopathic_and_osteopathic_physicians
   provider_role: primary_care_provider
   provider_role_free_text: A Primary Care Provider
@@ -9,8 +9,8 @@ dr_dem_bones:
   patient: joe_smith
 
 dr_ava_heart:
-  start_service: 1977-03-23
-  end_service: 1987-03-23
+  start_service: 1977-03-23 00:00:00 -00:00
+  end_service: 1987-03-23 00:00:00 -00:00
   provider_type: managed_care_organizations
   provider_role: referring_provider
   provider_role_free_text: Refers patients to providers
@@ -19,8 +19,8 @@ dr_ava_heart:
   patient: emily_jones
 
 dr_ivana_facey:
-  start_service: 1977-03-23
-  end_service: 1987-03-23
+  start_service: 1977-03-23 00:00:00 -00:00
+  end_service: 1987-03-23 00:00:00 -00:00
   provider_type: hospitals
   provider_role: primary_care_provider
   provider_role_free_text: Something like a primary care provider
@@ -29,8 +29,8 @@ dr_ivana_facey:
   patient: jennifer_thompson
 
 rn_mary_smith:
-  start_service: 1977-03-23
-  end_service: 1987-03-23
+  start_service: 1977-03-23 00:00:00 -00:00
+  end_service: 1987-03-23 00:00:00 -00:00
   provider_type: nursing_service_related_providers
   provider_role: consulting_provider
   provider_role_free_text: A consultant to the doctor

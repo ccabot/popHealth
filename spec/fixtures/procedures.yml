@@ -2,7 +2,7 @@ joe_smith_procedure:
   procedure_id: e401f340-7be2-11db-9fe1-0800200c9a66
   name: Total hip replacement, left
   code: 52734007
-  procedure_date: 1976-12-31
+  procedure_date: 1976-12-31 00:00:00 -00:00
   patient: joe_smith
   procedure_status_code_id: 989355118
 
@@ -10,7 +10,7 @@ emily_jones_procedure:
   procedure_id: e401f340-7be2-11db-9fe1-0800200c9a66
   name: Total hip replacement, left
   code: 52734007
-  procedure_date: 2006-10-24
+  procedure_date: 2006-10-24 00:00:00 -00:00
   patient: emily_jones
   procedure_status_code_id: 989355118
 
@@ -18,7 +18,7 @@ will_haynes_procedure:
   procedure_id: e401f340-7be2-11db-9fe1-0800200c9a66
   name: Total hip replacement, left
   code: 52734007
-  procedure_date: 2003-04-30
+  procedure_date: 2003-04-30 00:00:00 -00:00
   patient: will_haynes
   procedure_status_code_id: 989355118
 
@@ -26,7 +26,7 @@ jennifer_thompson_procedure:
   procedure_id: e401f340-7be2-11db-9fe1-0800200c9a66
   name: Total hip replacement, left
   code: 52734007
-  procedure_date: 1999-03-23
+  procedure_date: 1999-03-23 00:00:00 -00:00
   patient: jennifer_thompson
   procedure_status_code_id: 989355118
 
@@ -34,6 +34,6 @@ theodore_smith_procedure:
   procedure_id: e401f340-7be2-11db-9fe1-0800200c9a66
   name: Total hip replacement, left
   code: 52734007
-  procedure_date: 2002-07-15
+  procedure_date: 2002-07-15 00:00:00 -00:00
   patient: theodore_smith
   procedure_status_code_id: 989355118

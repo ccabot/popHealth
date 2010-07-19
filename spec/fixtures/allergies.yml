@@ -1,7 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 joes_allergy:
-  start_event: 2006-02-21
+  start_event: 2006-02-21 00:00:00 -00:00
   free_text_product: Penicillin
   product_code: 70618
   adverse_event_type: propensity_to_adverse_reactions
@@ -11,8 +11,8 @@ joes_allergy:
   patient: joe_smith
 
 emilys_allergy:
-  start_event: 2006-02-21
-  end_event: 2028-03-26
+  start_event: 2006-02-21 00:00:00 -00:00
+  end_event: 2028-03-26 00:00:00 -00:00
   free_text_product: Penicillin
   product_code: 70618
   adverse_event_type: drug_allergy
@@ -22,8 +22,8 @@ emilys_allergy:
   patient: emily_jones
 
 teds_first_allergy:
-  start_event: 2005-02-21
-  end_event: 2008-02-21
+  start_event: 2005-02-21 00:00:00 -00:00
+  end_event: 2008-02-21 00:00:00 -00:00
   free_text_product: Aspirin
   product_code: 1191
   adverse_event_type: propensity_to_adverse_reactions_to_drug
@@ -33,8 +33,8 @@ teds_first_allergy:
   patient: theodore_smith
 
 teds_second_allergy:
-  start_event: 2005-02-21
-  end_event: 2008-02-21
+  start_event: 2005-02-21 00:00:00 -00:00
+  end_event: 2008-02-21 00:00:00 -00:00
   free_text_product: Codeine
   product_code: 2670
   adverse_event_type: allergy_to_substance
@@ -44,8 +44,8 @@ teds_second_allergy:
   patient: theodore_smith
 
 wills_allergy:
-  start_event: 2005-02-21
-  end_event: 2048-12-21
+  start_event: 2005-02-21 00:00:00 -00:00
+  end_event: 2048-12-21 00:00:00 -00:00
   free_text_product: Aspirin
   product_code: 1191
   adverse_event_type: drug_intolerance
@@ -55,8 +55,8 @@ wills_allergy:
   patient: will_haynes
 
 davids_allergy:
-  start_event: 1974-06-30
-  end_event: 2021-12-21
+  start_event: 1974-06-30 00:00:00 -00:00
+  end_event: 2021-12-21 00:00:00 -00:00
   free_text_product: Codeine
   product_code: 2670
   adverse_event_type: drug_allergy

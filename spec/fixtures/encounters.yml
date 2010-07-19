@@ -3,7 +3,7 @@ joe_smith_encounter:
   free_text: IUD
   name: Insertion of intrauterine device (IUD)
   encounter_type: medical
-  encounter_date: 1966-12-31
+  encounter_date: 1966-12-31 00:00:00 -00:00
   location_name: Winchester Hospital
   encounter_location_code: hospital
   patient: joe_smith
@@ -13,7 +13,7 @@ emily_jones_encounter:
   free_text: IUD
   name: Insertion of intrauterine device (IUD)
   encounter_type: general
-  encounter_date: 1966-12-31
+  encounter_date: 1966-12-31 00:00:00 -00:00
   location_name: Village Hospital
   encounter_location_code: hospital
   patient: emily_jones
@@ -23,7 +23,7 @@ will_haynes_encounter:
   free_text: IUD
   name: Insertion of intrauterine device (IUD)
   encounter_type: surgical
-  encounter_date: 1966-12-31
+  encounter_date: 1966-12-31 00:00:00 -00:00
   location_name: South Shore Hospital ER
   encounter_location_code: emergency_room
   patient: will_haynes
@@ -33,7 +33,7 @@ jennifer_thompson_encounter:
   free_text: IUD
   name: Insertion of intrauterine device (IUD)
   encounter_type: medical
-  encounter_date: 1966-12-31
+  encounter_date: 1966-12-31 00:00:00 -00:00
   location_name: Heywood Hospital
   encounter_location_code: ambulatory_health_care_facilities
   patient: jennifer_thompson
@@ -43,7 +43,7 @@ theodore_smith_encounter:
   free_text: IUD
   name: Insertion of intrauterine device (IUD)
   encounter_type: general
-  encounter_date: 1966-12-31
+  encounter_date: 1966-12-31 00:00:00 -00:00
   location_name: General Hospital
   encounter_location_code: hospital
   patient: theodore_smith

@@ -8,7 +8,7 @@ joe_smith_medication:
   status:
   quantity_ordered_value:
   quantity_ordered_unit:
-  expiration_time: 2007-09-27
+  expiration_time: 2007-09-27 00:00:00 -00:00
   
 emily_jones_medication:
   patient: emily_jones
@@ -20,7 +20,7 @@ emily_jones_medication:
   status:
   quantity_ordered_value:
   quantity_ordered_unit:
-  expiration_time: 2008-11-17
+  expiration_time: 2008-11-17 00:00:00 -00:00
   
 will_haynes_medication:
   patient: will_haynes
@@ -32,7 +32,7 @@ will_haynes_medication:
   status:
   quantity_ordered_value:
   quantity_ordered_unit:
-  expiration_time: 2010-03-27
+  expiration_time: 2010-03-27 00:00:00 -00:00
   
 jennifer_thompson_medication:
   patient: jennifer_thompson
@@ -44,7 +44,7 @@ jennifer_thompson_medication:
   status:
   quantity_ordered_value:
   quantity_ordered_unit:
-  expiration_time: 2015-10-02
+  expiration_time: 2015-10-02 00:00:00 -00:00
   
 theodore_smith_medication:
   patient: theodore_smith
@@ -56,4 +56,4 @@ theodore_smith_medication:
   status: 
   quantity_ordered_value: 1
   quantity_ordered_unit: 
-  expiration_time: 2050-12-31
+  expiration_time: 2050-12-31 00:00:00 -00:00

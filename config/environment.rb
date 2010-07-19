@@ -81,6 +81,8 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', :version => '>= 2.3.6', :lib => 'will_paginate', :source => 'http://gems.github.com'
 
   config.gem 'uuid', :version => '2.0.1'
+  config.gem 'mongo'
+  config.gem 'mongo_mapper'
 
   # These are dependencies for the tests.
   # We just want to make sure they're available without loading them.
@@ -93,6 +95,8 @@ Rails::Initializer.run do |config|
 
   # Setting a default timezone, please change this to where ever you are deployed
   config.time_zone = "Eastern Time (US & Canada)"
+
+  MONGO_DB_NAME = "poplaika_#{ENV['RAILS_ENV'] || 'development'}"
 end
 
 ENV['HOST_URL'] = 'http://projectpophealth.org/demo'
