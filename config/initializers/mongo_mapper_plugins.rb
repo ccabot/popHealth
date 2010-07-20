@@ -1,0 +1,2 @@
+require_dependency 'has_select_options'
+MongoMapper::Document.append_extensions(HasSelectOptionsExtension)

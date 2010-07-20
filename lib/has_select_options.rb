@@ -51,11 +51,11 @@
 #
 module HasSelectOptionsExtension
   def has_select_options(args = {})
-    (class << self; self; end).instance_eval do
+    self.class.instance_eval do
       method_name = args.delete(:method_name) || :select_options
       label_column = args.delete(:label_column) || :name
       define_method(method_name) do |*x|
-        (x.size > 0 ? x[0] : find(:all, { :order => 'name ASC' }.merge(args))).map do |r|
+        (x.size > 0 ? x[0] : all({ :sort => 'name' }.merge(args))).map do |r|
           block_given? ? yield(r) : [r.send(label_column), r.id]
         end
       end
@@ -65,4 +65,3 @@ module HasSelectOptionsExtension
     end
   end
 end
-
