@@ -18,7 +18,7 @@ class Medication < ActiveRecord::Base
       :status => :hitsp_r2_optional,
       :quantity_ordered_value => :hitsp_r2_optional,
       :quantity_ordered_unit => :hitsp_r2_optional,
-      :expiration_date => :hitsp_r2_optional,
+      :expiration_time => :hitsp_r2_optional,
     }
   end
 
