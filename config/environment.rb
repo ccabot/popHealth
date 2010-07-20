@@ -87,7 +87,7 @@ Rails::Initializer.run do |config|
   # We just want to make sure they're available without loading them.
   config.gem 'rspec',       :lib => false, :version => '>= 1.2.2'
   config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.2'
-  config.gem 'json_pure', :version => '>= 1.4.3'
+  config.gem 'json_pure', :lib => 'json', :version => '>= 1.4.3'
 
   config.gem 'state_machine'
 
