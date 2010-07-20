@@ -8,7 +8,7 @@ class PersonName
 
   belongs_to :nameable, :polymorphic => true
 
-  after_save { |r| r.nameable.try(:patient).try(:update_attributes, :updated_at => DateTime.now) }
+#  after_save { |r| r.nameable.try(:patient).try(:update_attributes, :updated_at => DateTime.now) }
 
   def blank?
     %w[ name_prefix first_name last_name name_suffix ].all? {|a| read_attribute(a).blank? }

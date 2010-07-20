@@ -17,7 +17,7 @@ class Telecom
   # RM: yes... yes I did...
   belongs_to :reachable, :polymorphic => true
 
-  after_save { |r| r.reachable.try(:patient).try(:update_attributes, :updated_at => DateTime.now) }
+#  after_save { |r| r.reachable.try(:patient).try(:update_attributes, :updated_at => DateTime.now) }
 
   def blank?
     %w[ home_phone work_phone mobile_phone

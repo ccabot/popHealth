@@ -5,7 +5,7 @@ module PatientChild
   def self.included(base)
     base.class_eval do
       belongs_to :patient
-      after_save { |r| r.patient.update_attributes(:updated_at => DateTime.now) }
+#      after_save { |r| p r.class; r._parent_document.update_attributes(:updated_at => Time.now) }
     end
   end
 end
