@@ -208,7 +208,7 @@ class Patient
   # Populate a patient record with random values. This does not generate
   # semantically valid C32 documents.
   def randomize()
-    self.registration_information ||= RegistrationInformation.new
+    self.registration_information = RegistrationInformation.new
 
     registration_information.randomize(self)
     self.name = registration_information.full_name
