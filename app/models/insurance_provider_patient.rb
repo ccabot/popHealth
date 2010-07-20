@@ -42,9 +42,9 @@ class InsuranceProviderPatient
     self.telecom.mobile_phone = reg_info.telecom.work_phone
     self.date_of_birth = reg_info.date_of_birth()
 
-    self.start_coverage_date = DateTime.new(reg_info.date_of_birth.year + rand(DateTime.now.year - reg_info.date_of_birth.year),
+    self.start_coverage_date = Time.utc(reg_info.date_of_birth.year + rand(DateTime.now.year - reg_info.date_of_birth.year),
                        rand(12) + 1, rand(28) + 1)
-    self.end_coverage_date = DateTime.new(self.start_coverage_date.year + rand(DateTime.now.year - self.start_coverage_date.year),
+    self.end_coverage_date = Time.utc(self.start_coverage_date.year + rand(DateTime.now.year - self.start_coverage_date.year),
                        rand(12) + 1, rand(28) + 1)
   end
 

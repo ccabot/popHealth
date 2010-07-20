@@ -47,7 +47,7 @@
 			<ul class='stack stats'>
 				<li class='age'>
 					<label>age</label>
-					<span class='value int'><%= ((DateTime.now - ri.date_of_birth).to_i/365).round %></span>
+					<span class='value int'><%= ((Time.now - ri.date_of_birth)/(3600 * 24 * 365)).round %></span>
 				</li>
 				<li class='gender'>
 					<label>gender</label>

@@ -78,7 +78,7 @@ class RegistrationInformation
     pi.randomize
     self.affinity_domain_identifier = pi
 
-    self.document_timestamp = DateTime.new(2000 + rand(8), rand(12) + 1, rand(28) + 1)
+    self.document_timestamp = Time.utc(2000 + rand(8), rand(12) + 1, rand(28) + 1)
 
     name = PersonName.new
     name.first_name = Faker::Name.first_name
@@ -92,7 +92,7 @@ class RegistrationInformation
     # smarter fake data from US 2000 census
     self.gender = Gender.find_by_name(rand > 0.51 ? "Male" : "Female")
     
-    self.date_of_birth = DateTime.new(Date.today.year - RegistrationInformation.random_age, rand(12) + 1, rand(28) + 1)
+    self.date_of_birth = Time.utc(Date.today.year - RegistrationInformation.random_age, rand(12) + 1, rand(28) + 1)
 
     self.address = Address.new
     self.address.randomize()

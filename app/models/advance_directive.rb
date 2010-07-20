@@ -109,7 +109,7 @@ class AdvanceDirective
     self.free_text = "Do not give " + self.advance_directive_type.name
     self.address.randomize()
     self.telecom.randomize()
-    self.start_effective_time = DateTime.new(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
+    self.start_effective_time = Time.utc(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
   end
 
   

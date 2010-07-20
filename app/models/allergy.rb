@@ -114,7 +114,7 @@ class Allergy
     self.free_text_product = allergen.split[0]
     self.product_code = allergen.split[1]
 
-    self.start_event = DateTime.new(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
+    self.start_event = Time.utc(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
 
     self.adverse_event_type = AdverseEventType.find :random
     self.severity_term = SeverityTerm.find :random

@@ -70,7 +70,7 @@ class Condition
 
   def randomize(gender, birth_date, condition)
     
-    self.start_event = DateTime.new(rand_range(birth_date.year, DateTime.now.year), rand(12) + 1, rand(28) +1)
+    self.start_event = Time.utc(rand_range(birth_date.year, DateTime.now.year), rand(12) + 1, rand(28) +1)
     
     case condition
     when :diabetes

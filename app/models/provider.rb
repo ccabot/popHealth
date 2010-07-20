@@ -74,8 +74,8 @@ class Provider
     self.person_name.first_name = Faker::Name.first_name
     self.person_name.last_name = Faker::Name.last_name
 
-    self.start_service = DateTime.new(reg_info.date_of_birth.year + rand(DateTime.now.year - reg_info.date_of_birth.year), rand(12) + 1, rand(28) + 1)
-    self.end_service = DateTime.new(self.start_service.year + rand(DateTime.now.year - self.start_service.year), rand(12) + 1, rand(28) + 1)
+    self.start_service = Time.utc(reg_info.date_of_birth.year + rand(DateTime.now.year - reg_info.date_of_birth.year), rand(12) + 1, rand(28) + 1)
+    self.end_service = Time.utc(self.start_service.year + rand(DateTime.now.year - self.start_service.year), rand(12) + 1, rand(28) + 1)
 
     self.provider_type = ProviderType.find :random
     self.provider_role = ProviderRole.find :random

@@ -39,7 +39,7 @@ class MedicalEquipment
     self.name = "Automatic implantable cardioverter defibrillator"
     self.code = "72506001"
     self.supply_id = "03ca01b0-7be1-11db-8fe1-0822200c9a33"
-    self.date_supplied = DateTime.new(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
+    self.date_supplied = Time.utc(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
   end
 
   def self.c32_component(medical_equipments, xml)

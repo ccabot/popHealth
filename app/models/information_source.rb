@@ -55,7 +55,7 @@ class InformationSource
   def randomize()
     chars = ('A'..'Z').to_a
     char = chars[rand(chars.length)]
-    self.time =  DateTime.new(2000 + rand(9), rand(12) + 1, rand(28) + 1)
+    self.time = Time.utc(2000 + rand(9), rand(12) + 1, rand(28) + 1)
     self.person_name = PersonName.new
     self.person_name.first_name = Faker::Name.first_name
     self.person_name.last_name = Faker::Name.last_name

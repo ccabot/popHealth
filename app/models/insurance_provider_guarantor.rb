@@ -21,7 +21,7 @@ class InsuranceProviderGuarantor
     self.person_name.last_name = Faker::Name.last_name
     self.address.randomize()
     self.telecom.randomize()
-    self.effective_date =  DateTime.new(1950 + rand(58), rand(12) + 1, rand(28) + 1)
+    self.effective_date =  Time.utc(1950 + rand(58), rand(12) + 1, rand(28) + 1)
   end
 
 end

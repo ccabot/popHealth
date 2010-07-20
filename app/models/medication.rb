@@ -118,7 +118,7 @@ class Medication
       self.code_system = CodeSystem.find_by_code("2.16.840.1.113883.4.9")  #FDA UNII
       self.free_text_brand_name = ""
       self.medication_type = MedicationType.find :random
-      self.expiration_time = DateTime.new(2008 + rand(4), rand(12) + 1, rand(28) + 1)
+      self.expiration_time = Time.utc(2008 + rand(4), rand(12) + 1, rand(28) + 1)
     else
       product_names = ["Metoprolol", "Cephalexin", "Albuterol inhalant", "Prednisone", "Clopidogrel"]
       product_codes = [430618, 197454, 307782, 312615, 309362]
@@ -130,7 +130,7 @@ class Medication
       self.code_system = CodeSystem.find_by_code("2.16.840.1.113883.6.88")  #RxNorm
       self.free_text_brand_name = brand_names[index]
       self.medication_type = MedicationType.find :random
-      self.expiration_time = DateTime.new(2008 + rand(4), rand(12) + 1, rand(28) + 1)
+      self.expiration_time = Time.utc(2008 + rand(4), rand(12) + 1, rand(28) + 1)
     end
   end
   

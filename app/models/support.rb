@@ -64,8 +64,8 @@ class Support
   end
 
   def randomize(birth_date)
-    self.start_support = DateTime.new(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
-    self.end_support = DateTime.new(start_support.year + rand(DateTime.now.year - start_support.year), rand(12) + 1, rand(28) +1)
+    self.start_support = Time.utc(birth_date.year + rand(DateTime.now.year - birth_date.year), rand(12) + 1, rand(28) +1)
+    self.end_support = Time.utc(start_support.year + rand(DateTime.now.year - start_support.year), rand(12) + 1, rand(28) +1)
     self.person_name = PersonName.new
     self.person_name.first_name = Faker::Name.first_name
     self.person_name.last_name = Faker::Name.last_name

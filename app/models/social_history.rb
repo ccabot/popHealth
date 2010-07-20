@@ -43,7 +43,7 @@ class SocialHistory
   end
   
    def randomize(birth_date, conditions)
-    self.start_effective_time = DateTime.new(rand_range(birth_date.year, DateTime.now.year), rand(12) + 1, rand(28) +1)
+    self.start_effective_time = Time.utc(rand_range(birth_date.year, DateTime.now.year), rand(12) + 1, rand(28) +1)
     
     conditions.try(:each) do |condition|
       if condition.free_text_name == "Smoker finding"
