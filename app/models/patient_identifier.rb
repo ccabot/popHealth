@@ -1,5 +1,5 @@
 class PatientIdentifier
-  include MongoMapper::EmbeddedDocument
+  include MongoMapper::Document
 
 
   strip_attributes!
