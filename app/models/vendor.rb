@@ -3,13 +3,8 @@ class Vendor < ActiveRecord::Base
 
   belongs_to :user
   attr_protected :user
-  has_many :test_plans, :dependent => :destroy
   validates_presence_of :public_id, :user_id
   validates_uniqueness_of :public_id, :scope => :user_id, :message => 'name is already in use.'
-
-  def count_test_plans
-    test_plans.count
-  end
 
   def to_s
     public_id

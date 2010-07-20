@@ -21,19 +21,6 @@ class User < ActiveRecord::Base
 
   has_many :vendors, :dependent => :destroy
 
-  has_many :test_plans, :dependent => :destroy do
-    def by_vendor
-      inject({}) do |tp, all|
-        all[tp.vendor] ||= []
-        all[tp.vendor] << tp
-      end
-    end
-  end
-
-  def count_test_plans
-    test_plans.count
-  end
-
   # Authenticates a user by their email name and unencrypted password.  Returns the user or nil.
   def self.authenticate(email, password)
     u = find_by_email(email) # need to get the salt
