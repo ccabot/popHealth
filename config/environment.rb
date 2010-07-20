@@ -21,12 +21,10 @@ java.lang.System.setProperty("javax.xml.parsers.DocumentBuilderFactory","net.sf.
 require 'activerecord'
 require_dependency 'has_select_options'
 require_dependency 'has_c32_component'
-require_dependency 'find_random'
 
 class ActiveRecord::Base
   extend HasSelectOptionsExtension
   extend HasC32ComponentExtension
-  extend FindRandom
 end
 
 Rails::Initializer.run do |config|
