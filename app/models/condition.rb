@@ -1,7 +1,9 @@
 class Condition
   include MongoMapper::EmbeddedDocument
 
-
+  key :start_event
+  key :end_event
+  key :free_text_name
 
   belongs_to :problem_type
 

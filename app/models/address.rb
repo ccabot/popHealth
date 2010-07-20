@@ -1,7 +1,10 @@
 class Address
   include MongoMapper::Document
 
-
+  key :street_address_line_one
+  key :city
+  key :state
+  key :postal_code
 
   belongs_to :iso_country
   belongs_to :iso_state

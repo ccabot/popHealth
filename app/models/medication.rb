@@ -1,7 +1,13 @@
 class Medication
   include MongoMapper::EmbeddedDocument
 
-
+  key :product_coded_display_name
+  key :product_code
+  key :free_text_brand_name
+  key :status
+  key :quantity_ordered_value
+  key :quantity_ordered_unit
+  key :expiration_time
 
   belongs_to :medication_type
   belongs_to :code_system

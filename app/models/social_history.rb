@@ -1,7 +1,7 @@
 class SocialHistory
   include MongoMapper::EmbeddedDocument
 
-
+  key :start_effective_time
 
   belongs_to :social_history_type
 

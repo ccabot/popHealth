@@ -1,6 +1,7 @@
 class Language
   include MongoMapper::EmbeddedDocument
 
+  key :preference, Boolean
 
   belongs_to :iso_country
   belongs_to :iso_language

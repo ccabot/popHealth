@@ -1,7 +1,9 @@
 class InformationSource
   include MongoMapper::EmbeddedDocument
 
-
+  key :time
+  key :document_id
+  key :organization_name
 
   include PatientChild
   include PersonLike

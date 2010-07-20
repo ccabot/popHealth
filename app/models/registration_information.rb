@@ -1,7 +1,8 @@
 class RegistrationInformation
   include MongoMapper::EmbeddedDocument
 
-
+  key :document_timestamp
+  key :date_of_birth
 
   belongs_to :race
   belongs_to :ethnicity

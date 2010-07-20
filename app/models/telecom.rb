@@ -6,7 +6,12 @@
 class Telecom
   include MongoMapper::Document
 
-
+  key :home_phone
+  key :work_phone
+  key :mobile_phone
+  key :vacation_home_phone
+  key :email
+  key :url
 
   # AG: did you expect telecomable? ;-)
   # RM: yes... yes I did...

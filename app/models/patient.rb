@@ -7,6 +7,9 @@ class Patient
   include MongoMapper::Document
   extend HasC32ComponentExtension
 
+  key :name, String
+  key :pregnant, Boolean
+
   has_many_c32 :languages
   has_many_c32 :providers
   has_many_c32 :medications

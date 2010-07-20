@@ -1,7 +1,10 @@
 class PersonName
   include MongoMapper::Document
 
-
+  key :name_prefix
+  key :first_name
+  key :last_name
+  key :name_suffix
 
   belongs_to :nameable, :polymorphic => true
 

@@ -4,6 +4,14 @@
 class AbstractResult
   include MongoMapper::Document
 
+  key :result_id
+  key :result_date
+  key :result_code
+  key :result_code_display_name
+  key :status_code
+  key :type
+  key :value_scalar
+  key :value_unit
 
   class AbstractInstantiationError < StandardError; end
   def self.new(*args)

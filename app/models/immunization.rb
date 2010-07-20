@@ -1,7 +1,9 @@
 class Immunization
   include MongoMapper::EmbeddedDocument
 
-
+  key :administration_date
+  key :lot_number_text
+  key :refusal
 
   belongs_to :vaccine
   belongs_to :no_immunization_reason

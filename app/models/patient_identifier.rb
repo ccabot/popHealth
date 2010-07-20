@@ -1,6 +1,8 @@
 class PatientIdentifier
   include MongoMapper::Document
 
+  key :patient_identifier
+  key :affinity_domain
 
 
   include PatientChild

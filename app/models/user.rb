@@ -3,6 +3,20 @@ require 'digest/sha1'
 class User
   include MongoMapper::Document
 
+  key :email
+  key :first_name
+  key :last_name
+  key :company
+  key :company_url
+  key :salt
+  key :remember_token
+  key :password
+  key :crypted_password
+  key :password_reset_code
+  key :send_updates
+  key :terms_of_service
+  key :admin
+
   has_select_options(:label_column => :display_name, :order => 'last_name ASC, first_name ASC')
 
   # Virtual attribute for the unencrypted password
