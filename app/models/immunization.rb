@@ -58,7 +58,7 @@ class Immunization
     p = rand
     # 50% chance patient should be considered of influenza vaccine
     if p < 0.5
-      influenza_vaccines = Vaccine.find(:all, :conditions => "name like 'Influenza Virus Vaccine%'")
+      influenza_vaccines = Vaccine.all(:name => /Influenza Virus Vaccine.*/)
       random_influenza_vaccine = influenza_vaccines[rand(influenza_vaccines.length)]
 
       age = Date.today.year - birth_date.year
