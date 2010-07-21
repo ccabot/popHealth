@@ -4,7 +4,7 @@
 # make validation easier when dealing with phone numbers
 # vs. email addresses
 class Telecom
-  include MongoMapper::Document
+  include MongoMapper::EmbeddedDocument
 
   key :home_phone
   key :work_phone

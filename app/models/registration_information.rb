@@ -12,6 +12,9 @@ class RegistrationInformation
   belongs_to :affinity_domain_identifier,
     :foreign_key => 'affinity_domain_id', :class_name => 'PatientIdentifier'
 
+  has_one :telecom
+  has_one :address
+
   include PatientChild
   include PersonLike
 

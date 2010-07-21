@@ -1,15 +1,14 @@
 class Address
-  include MongoMapper::Document
+  include MongoMapper::EmbeddedDocument
 
   key :street_address_line_one
+  key :street_address_line_two
   key :city
   key :state
   key :postal_code
 
   belongs_to :iso_country
   belongs_to :iso_state
-  belongs_to :zip_code
-  belongs_to :addressable, :polymorphic => true
 
 #  after_save { |r| r.addressable.try(:patient).try(:update_attributes, :updated_at => DateTime.now) }
 
