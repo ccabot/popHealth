@@ -2,7 +2,6 @@ class SystemMessage
   include MongoMapper::Document
 
   belongs_to :author, :class_name => 'User'
-  attr_readonly :author
 
   belongs_to :updater, :class_name => 'User'
   attr_protected :updater

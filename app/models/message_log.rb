@@ -1,5 +1,5 @@
 class MessageLog
   include MongoMapper::Document
 
-  set_table_name "messagelog"
+  MongoMapper.database = "messagelog"
 end

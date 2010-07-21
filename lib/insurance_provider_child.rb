@@ -8,7 +8,7 @@ module InsuranceProviderChild
   def self.included(mod)
     mod.class_eval do
       belongs_to :insurance_provider
-      named_scope :by_patient, lambda { |patient|
+      scope :by_patient, lambda { |patient|
         {
           :include => :insurance_provider,
           :conditions => ['insurance_providers.patient_id = ?', patient.id]
