@@ -1,10 +1,7 @@
 class ClinicalDocument
   include MongoMapper::Document
 
-
-  has_attachment :content_type => 'text/xml', 
-                 :storage => :file_system, 
-                 :max_size => 500.kilobytes
+# FIXME 2010-07-21 ccabot need an alternative to attachment_fu for mongo
 
   has_one :test_plan
 
