@@ -1,7 +1,9 @@
 class Report
   include MongoMapper::Document
 
-  
+  key :numerator_query
+  key :denominator_query
+
   attr_accessor :numerator_request
 
   def numerator_query=(val)
@@ -101,7 +103,7 @@ class Report
   
   
   def self.load_static_content
-    @@patient_count = Patient.count_by_sql("select count(distinct patients.id) from patients").to_i
+    @@patient_count = Patient.count
     @@male = Gender.find_by_code('M')
     @@female = Gender.find_by_code('F')
     @@tobacco_use_and_exposure = SocialHistoryType.find_by_name("Tobacco use and exposure")
