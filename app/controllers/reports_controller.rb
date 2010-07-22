@@ -55,31 +55,23 @@ class ReportsController < ApplicationController
   def index
     if params[:id]
       response = ""
-      begin
-            @report = Report.find_and_populate(params[:id])
-            @report.save!
-            resp = {}
-            resp = @report.to_json_hash
-            load_report_data(@report.numerator_query, resp, Report.patient_count)
-            response = resp.to_json
-      rescue => e
-        response = "#{e}".to_json
-      end
+      @report = Report.find_and_populate(params[:id])
+      @report.save!
+      resp = {}
+      resp = @report.to_json_hash
+      load_report_data(@report.numerator_query, resp, Report.patient_count)
+      response = resp.to_json
        render :json => response
     else
       # load the sidebar summary information
       response = ""
-      begin
-        @reports = Report.all_and_populate(:order => 'title asc')
-        resp = {
-          "populationCount" => Patient.count_by_sql("select count(*) from patients").to_s,
-          "populationName" => "Sagacious Healthcare Services",
-          "reports" => @reports
-        }
-        response = resp.to_json
-      rescue => e
-        response = "#{e}".to_json
-      end
+      @reports = Report.all_and_populate(:order => 'title asc')
+      resp = {
+        "populationCount" => Patient.count,
+        "populationName" => "Sagacious Healthcare Services",
+        "reports" => @reports
+      }
+      response = resp.to_json
       render :json => response
     end
   end
@@ -90,14 +82,10 @@ class ReportsController < ApplicationController
     resp = {}
     
     response = ""
-    begin
-     @report = Report.create_and_populate(params) 
-     resp = @report.to_json_hash
-     resp = load_report_data(@report.numerator_query, resp, Report.patient_count)
-     response = resp.to_json
-    rescue => e
-      response = "#{e}".to_json
-    end
+    @report = Report.create_and_populate(params) 
+    resp = @report.to_json_hash
+    resp = load_report_data(@report.numerator_query, resp, Report.patient_count)
+    response = resp.to_json
     render :json => response
   end
   
