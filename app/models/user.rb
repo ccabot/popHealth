@@ -10,6 +10,7 @@ class User
   key :company_url
   key :salt
   key :remember_token
+  key :remember_token_expires_at
   key :password
   key :crypted_password
   key :password_reset_code
@@ -71,7 +72,7 @@ class User
   def forget_me
     self.remember_token_expires_at = nil
     self.remember_token            = nil
-    save(false)
+    save
   end
 
   def forgot_password
