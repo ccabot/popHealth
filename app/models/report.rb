@@ -143,30 +143,11 @@ class Report
       return generate_population_query(report.numerator_request, prepend_sql)
   end
   
-  def self.generate_new_join_table_hash_status
-     join_tables = Hash["registration_information" =>                      false,
-                         "medications aspirin" =>                          false,
-                         "conditions hypertension" =>                      false,
-                         "conditions diabetes" =>                          false,
-                         "conditions ischemic_vascular_disease" =>         false,
-                         "conditions lipoid_disorder" =>                   false,
-                         "conditions smoking" =>                           false,
-                         "conditions mammography" =>                       false,
-                         "medications aspirin" =>                          false,
-                         "social_history smoking_cessation" =>             false,
-                         "abstract_results diastolic" =>                   false,
-                         "abstract_results ldl_cholesterol" =>             false, 
-                         "abstract_results colorectal_cancer_screening" => false,
-                         "abstract_results hb_a1c" =>                      false,
-                         "immunizations influenza_immunization" =>         false,
-                         "vaccines influenza_vaccine" =>                   false]
-   end
-  
   def self.count_patients(report_request, load = false)
     if load
       load_static_content
     end
-    Patient.count_by_sql(generate_population_query(report_request))
+    Patient.count(generate_population_query(report_request))
   end
    # this merge is a little bit specialized, since it will do a careful merge of the values in
    # the hashs' arrays, where there will be no duplicate entries in the arrays, and no entries
@@ -198,261 +179,59 @@ class Report
    end
    
    
-   def self.generate_population_query(request, prepend_sql = "SELECT COUNT( DISTINCT patients.id ) FROM patients ")
-     population_query = prepend_sql
-     population_query = population_query + generate_from_sql(request, generate_new_join_table_hash_status())
-     population_query = population_query + generate_where_sql(request, generate_new_join_table_hash_status())
-     population_query
-   end
-   
-   def self.generate_from_sql(request, from_tables)
-     from_sql = ""
+   def self.generate_population_query(request)
+     query_conditions = {}
+     query_js = []
 
+     # FIXME 2010-07-22 ccabot this can probably be coded to use conditions instead of JS
      if request.has_key?(:gender)
-       if from_tables["registration_information"] == false
-         from_sql = from_sql + ", registration_information"
-         from_tables["registration_information"] = true
+       gender_clauses = []
+       request[:gender].each do |next_gender_query|
+         next_gender_query == "Female" &&
+           gender_clauses << "this.registration_information.gender_id=='#{@@female.id}'"
+         next_gender_query == "Male" &&
+           gender_clauses << "this.registration_information.gender_id=='#{@@male.id}'"
        end
+       query_js << "( #{gender_clauses.join '||'} )"
      end
 
      if request.has_key?(:age)
-       if from_tables["registration_information"] == false
-         from_sql = from_sql + ", registration_information"
-         from_tables["registration_information"] = true
-       end
-     end
-
-     if request.has_key?(:therapies)
-       if request[:therapies].include?("Smoking Cessation")
-         if from_tables["social_history smoking_cessation"] == false
-           from_sql = from_sql + ", social_history smoking_cessation"
-           from_tables["social_history smoking_cessation"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:diabetes)
-       if request[:diabetes].include?("Yes")
-         if from_tables["conditions diabetes"] == false
-           from_sql = from_sql + ", conditions diabetes"
-           from_tables["conditions diabetes"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:hypertension)
-       if request[:hypertension].include?("Yes")
-         if from_tables["conditions hypertension"] == false
-           from_sql = from_sql + ", conditions hypertension"
-           from_tables["conditions hypertension"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:ischemic_vascular_disease)
-       if request[:ischemic_vascular_disease].include?("Yes")
-         if from_tables["conditions ischemic_vascular_disease"] == false
-           from_sql = from_sql + ", conditions ischemic_vascular_disease"
-           from_tables["conditions ischemic_vascular_disease"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:lipoid_disorder)
-       if request[:lipoid_disorder].include?("Yes")
-         if from_tables["conditions lipoid_disorder"] == false
-           from_sql = from_sql + ", conditions lipoid_disorder"
-           from_tables["conditions lipoid_disorder"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:smoking)
-       if request[:smoking].include?("Current Smoker")
-         if from_tables["conditions smoking"] == false
-           from_sql = from_sql + ", conditions smoking"
-           from_tables["conditions smoking"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:medications)
-       medications = request[:medications]
-       medications.each do |next_medication|
-         if next_medication == "Aspirin"
-           if from_tables["medications aspirin"] == false
-             from_sql = from_sql + ", medications aspirin"
-             from_tables["medications aspirin"] = true
-           end
-         end
-       end
-     end
-
-     if request.has_key?(:ldl_cholesterol)
-       if from_tables["abstract_results ldl_cholesterol"] == false
-         from_sql = from_sql + ", abstract_results ldl_cholesterol"
-         from_tables["abstract_results ldl_cholesterol"] = true
-       end
-     end
-
-     if request.has_key?(:blood_pressures)
-       if from_tables["abstract_results diastolic"] == false
-         from_sql = from_sql + ", abstract_results diastolic"
-         from_tables["abstract_results diastolic"] = true
-       end
-     end
-
-     if request.has_key?(:colorectal_cancer_screening)
-       if request[:colorectal_cancer_screening].include?("Yes")
-         if from_tables["abstract_results colorectal_cancer_screening"] == false
-           from_sql = from_sql + ", abstract_results colorectal_cancer_screening"
-           from_tables["abstract_results colorectal_cancer_screening"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:mammography)
-       if request[:mammography].include?("Yes")
-         if from_tables["conditions mammography"] == false
-           from_sql = from_sql + ", conditions mammography"
-           from_tables["conditions mammography"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:influenza_vaccine)
-       if request[:influenza_vaccine].include?("Yes")
-         if from_tables["immunizations influenza_immunization"] == false
-           from_sql = from_sql + ", immunizations influenza_immunization"
-           from_tables["immunizations influenza_immunization"] = true
-         end
-         if from_tables["vaccines influenza_vaccine"] == false
-           from_sql = from_sql + ", vaccines influenza_vaccine"
-           from_tables["vaccines influenza_vaccine"] = true
-         end
-       end
-     end
-
-     if request.has_key?(:hb_a1c)
-       if from_tables["abstract_results hb_a1c"] == false
-         from_sql = from_sql + ", abstract_results hb_a1c"
-         from_tables["abstract_results hb_a1c"] = true
-       end
-     end
-
-     from_sql
-
-   end
-
-   def self.generate_where_sql(request, where_tables)
-     where_sql = ""
-
-     if request.size > 0
-       where_sql = where_sql + " where "
-     else
-       return ""
-     end
-
-     start_using_and_keyword = false
-
-     if request.has_key?(:gender)
-       if where_tables["registration_information"] == false
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         where_sql = where_sql + "registration_information.patient_id = patients.id "
-         where_tables["registration_information"] = true
-         start_using_and_keyword = true
-       end
-
-       where_sql = where_sql + "and ("
-       gender_requests = request[:gender]
-       first_gender_query = true
-       gender_requests.each do |next_gender_query|
-         # or conditional query
-         if first_gender_query == false
-           where_sql = where_sql + "or "
-         else
-           first_gender_query = false
-         end
-         if next_gender_query == "Female"
-           where_sql = where_sql + "(registration_information.gender_id = " + 
-                       @@female.id.to_s + ") "
-         end
-         if next_gender_query == "Male"
-           where_sql = where_sql + "(registration_information.gender_id = " + 
-                       @@male.id.to_s + ") "
-         end
-       end
-       where_sql = where_sql + ")"
-     end
-
-     if request.has_key?(:age)
-       if where_tables["registration_information"] == false
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         where_sql = where_sql + "registration_information.patient_id = patients.id "
-         where_tables["registration_information"] = true
-         start_using_and_keyword = true
-       end
-
-       where_sql = where_sql + "and ("
-       first_age_query = true
-       age_requests = request[:age]
-       age_requests.each do |next_age_query|
-         # or conditional query
-         if first_age_query == false
-           where_sql = where_sql + "or "
-         end
-         first_age_query = false
+       ranges = []
+       request[:age].each do |next_age_query|
          if next_age_query == "<18"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE < (365*18)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 18.years.ago}}
          end
          if next_age_query == "18-30"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*18) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*30)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 30.years.ago, '$lt' => 18.years.ago}}
          end
          if next_age_query == "30-40"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*30) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*40)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 40.years.ago, '$lt' => 30.years.ago}}
          end
+         # mongdb hates old people!  they store date in an unsigned so
+         # you can't query for dates older than the unix epoch.
+         # really: http://jira.mongodb.org/browse/SERVER-405
          if next_age_query == "40-50"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*40) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*50)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 50.years.ago, '$lt' => 40.years.ago}}
          end
          if next_age_query == "50-60"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*50) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*60)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 60.years.ago, '$lt' => 50.years.ago}}
          end
          if next_age_query == "60-70"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*60) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*70)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 70.years.ago, '$lt' => 60.years.ago}}
          end
          if next_age_query == "70-80"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*70) "
-           where_sql = where_sql + "and now()::DATE - registration_information.date_of_birth::DATE < (365*80)) "
+           ranges << {"registration_information.date_of_birth" => {'$gt' => 80.years.ago, '$lt' => 70.years.ago}}
          end
          if next_age_query == "80+"
-           where_sql = where_sql + "(now()::DATE - registration_information.date_of_birth::DATE >= (365*80)) "
+           ranges << {"registration_information.date_of_birth" => {'$lt' => 80.years.ago}}
          end
        end
-       where_sql = where_sql + ")"
+       !ranges.empty? && query_conditions.merge!({'$or' => ranges})
      end
 
-     if request.has_key?(:therapies)
-       if request[:therapies].include?("Smoking Cessation")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["social_history smoking_cessation"] == false
-           where_sql = where_sql + "smoking_cessation.patient_id = patients.id "
-           where_tables["social_history smoking_cessation"] = true
-         end
-         where_sql = where_sql + "and smoking_cessation.social_history_type_id = " + 
-                     @@tobacco_use_and_exposure.id.to_s + " "
-       end
+     # FIXME 2010-07-22 ccabot this can probably be coded to use conditions instead of JS
+     if request.has_key?(:therapies) && request[:therapies].include?("Smoking Cessation")
+       query_js << "( this.smoking_cessation.social_history_type_id=='#{@@tobacco_use_and_exposure.id.to_s}' )"
      end
 
      # OMG, please remind everyone that this is a feasibility demo... a.k.a. throwaway code!
@@ -570,30 +349,12 @@ class Report
        end
      end
 
-     # see comment on diabetes query generation *rjm
      if request.has_key?(:smoking)
        if request[:smoking].include?("Current Smoker")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions smoking"] == false
-           where_sql = where_sql + "smoking.patient_id = patients.id "
-           where_tables["conditions smoking"] = true
-         end
-         #where_sql = where_sql + "and smoking.free_text_name = 'Smoker finding' "
-         where_sql = where_sql + "and smoking.free_text_name like 'Smoker %' "
+         query_conditions.merge! 'conditions.free_text_name' => /^Smoker /
        end
        if request[:smoking].include?("Non-Smoker")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         where_sql = where_sql + "patients.id not in (" + 
-                                 "select conditions.patient_id " +
-                                 "from conditions " +
-                                 #"where conditions.free_text_name = 'Smoker finding') "
-                                 "where conditions.free_text_name like 'Smoker %') "
+         query_conditions.merge! 'conditions.free_text_name' => {'$not' => /^Smoker /}
        end
      end
 
@@ -813,8 +574,8 @@ class Report
        where_sql = where_sql + ")"
      end
 
-     where_sql
-
+     query_conditions.merge!('$where' => query_js.join('&&')) if !query_js.empty?
+     query_conditions
    end
 
 
