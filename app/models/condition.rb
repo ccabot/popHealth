@@ -74,35 +74,35 @@ class Condition
     
     case condition
     when :diabetes
-      condition_code = "73211009"
+      condition_code = 73211009
       has_condition = Condition.make_has_condition({ [0, 18]  => {:M => 0.0039, :F => 0.0057}, 
                                                      [18, 36] => {:M => 0.0214, :F => 0.0153},
                                                      [36, 54] => {:M => 0.0854, :F => 0.0610},
                                                      [54, 72] => {:M => 0.1998, :F => 0.1672},
                                                      [72, 150] => {:M => 0.2239, :F => 0.1837} })
     when :hypertension
-      condition_code = "59621000"
+      condition_code = 59621000
       has_condition = Condition.make_has_condition({ [0, 18]  => {:M => 0.0003, :F => 0.0005}, 
                                                      [18, 36] => {:M => 0.0186, :F => 0.0098},
                                                      [36, 54] => {:M => 0.0836, :F => 0.0570},
                                                      [54, 72] => {:M => 0.1516, :F => 0.1392},
                                                      [72, 150] => {:M => 0.1766, :F => 0.2005} })
     when :ischemia
-      condition_code = "52674009"
+      condition_code = 52674009
       has_condition = Condition.make_has_condition({ [0, 18]  => {:M => 0.0039, :F => 0.0057}, 
                                                      [18, 36] => {:M => 0.0214, :F => 0.0153},
                                                      [36, 54] => {:M => 0.0854, :F => 0.0610},
                                                      [54, 72] => {:M => 0.1998, :F => 0.1672},
                                                      [72, 150] => {:M => 0.2239, :F => 0.1837} })
     when :lipoid
-      condition_code = "3744001"
+      condition_code = 3744001
       has_condition = Condition.make_has_condition({ [0, 18]  => {:M => 0.0039, :F => 0.0057}, 
                                                      [18, 36] => {:M => 0.0214, :F => 0.0153},
                                                      [36, 54] => {:M => 0.0854, :F => 0.0610},
                                                      [54, 72] => {:M => 0.1998, :F => 0.1672},
                                                      [72, 150] => {:M => 0.2239, :F => 0.1837} })
     when :smoking
-      condition_code = "77176002"
+      condition_code = 77176002
       has_condition = Condition.make_has_condition({ [19, 25]  => {:M => 0.295, :F => 0.193}, 
                                                      [25, 45] => {:M => 0.26, :F => 0.21},
                                                      [45, 65] => {:M => 0.245, :F => 0.193},
@@ -112,7 +112,7 @@ class Condition
       #168750009 (Mammography abnormal finding)
       #397143007 (Probably benign finding short interval follow up finding)
       #168749009 (Mammography normal finding)
-      mammogram_findings = ["129788004", "168750009", "397143007", "168749009"]
+      mammogram_findings = [129788004, 168750009, 397143007, 168749009]
       condition_code = mammogram_findings[rand(mammogram_findings.length)]
       has_condition = Condition.make_has_condition({ [10, 20]  => {:M => 0.0, :F => 0.044}, 
                                                      [20, 30]  => {:M => 0.0, :F => 0.201}, 
