@@ -2,7 +2,7 @@
 # find objects of either type, but you can only create new instances using
 # Result and VitalSign.
 class AbstractResult
-  include MongoMapper::Document
+  include MongoMapper::EmbeddedDocument
 
   key :result_id
   key :result_date

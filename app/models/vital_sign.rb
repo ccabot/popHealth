@@ -5,6 +5,7 @@
 # Methods in this class are overides to provide different template
 # ids when validating and generating XML
 class VitalSign < AbstractResult
+  include MongoMapper::EmbeddedDocument
 
   def section_template_id
     '2.16.840.1.113883.10.20.1.16'
