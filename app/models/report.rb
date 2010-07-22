@@ -3,36 +3,23 @@ class Report
 
   key :numerator_query
   key :denominator_query
+  key :title
 
   attr_accessor :numerator_request
+  attr_accessor :numerator
+  attr_accessor :denominator
 
-  def numerator_query=(val)
-    @numerator_query = val
+  def numerator_hash
+    YAML.load(@numerator_query)
   end
 
-  def denominator_query=(val)
-    @denominator_query = val
+  def denominator_hash
+    YAML.load(@denominator_query)
   end
 
-  def numerator_query
-    self[:numerator_query].present? ? @numerator_query ||= YAML.load(self[:numerator_query]) : @numerator_query ||= {}  
-    @numerator_query
-  end
-
-  def denominator_query
-    self[:denominator_query].present? ? @denominator_query ||= YAML.load(self[:denominator_query]) : @denominator_query ||= {}
-    @denominator_query
-  end
-
-  def save(*args)
-    self[:denominator_query] = YAML.dump(denominator_query)
-    self[:numerator_query] = YAML.dump(numerator_query)
-    super(args)
-  end
-  
   def to_json_hash
     {:title => self.title,  :numerator => self.numerator, :denominator => self.denominator, :id => self.id,
-      :numerator_fields => self.numerator_query, :denominator_fields => self.denominator_query}
+      :numerator_fields => self.numerator_hash, :denominator_fields => self.denominator_hash}
   end
   
   def to_json(*args)
@@ -53,7 +40,7 @@ class Report
       report.denominator_query = params[:denominator] || {}
       report.title = params[:title] || "Untitled Report"
       if !params[:denominator].blank? 
-        report.denominator = count_patients(report.denominator_query)
+        report.denominator = count_patients(report.denominator_hash)
       else
         report.denominator = @@patient_count
       end
@@ -70,12 +57,12 @@ class Report
       report.numerator_query = params[:numerator] || {}
       report.denominator_query = params[:denominator] || {}
       report.title = params[:title] if params[:title]
-      report.denominator = count_patients(report.denominator_query)
+      report.denominator = count_patients(report.denominator_hash)
     end
     
     # only run the numerator query if there are any fields provided
-    if report.numerator_query.size > 0
-      report.numerator = count_patients(merge_popconnect_request(report.denominator_query, report.numerator_query))
+    if report.numerator_hash.size > 0
+      report.numerator = count_patients(merge_popconnect_request(report.denominator_hash, report.numerator_hash))
     else
       report.numerator = 0
     end
@@ -87,11 +74,11 @@ class Report
     reports = all(options)
     load_static_content
     reports.each do |item|
-       item.denominator = (count_patients(item.denominator_query))
+       item.denominator = (count_patients(item.denominator_hash))
         # only run the numerator query if there are any fields provided
         if item.numerator_query.size > 0
-          item.numerator = count_patients(merge_popconnect_request(item.denominator_query,
-                                                                            item.numerator_query))
+          item.numerator = count_patients(merge_popconnect_request(item.denominator_hash,
+                                                                            item.numerator_hash))
         else
           item.numerator = 0
         end
@@ -234,6 +221,8 @@ class Report
        query_js << "( this.smoking_cessation.social_history_type_id=='#{@@tobacco_use_and_exposure.id.to_s}' )"
      end
 
+     where_sql = ''
+
      # OMG, please remind everyone that this is a feasibility demo... a.k.a. throwaway code!
      # If you are reading this comment and going WTF?, see me (McCready) and I'll buy you a
      # lunch as well as numerous shots of some form of alcholic liquid to explain what is 
@@ -241,22 +230,9 @@ class Report
      # failed me on the popHealth work...  So sorry!!!
      if request.has_key?(:diabetes)
        if request[:diabetes].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions diabetes"] == false
-           where_sql = where_sql + "diabetes.patient_id = patients.id "
-           where_tables["conditions diabetes"] = true
-         end
-         #where_sql = where_sql + "and diabetes.free_text_name = 'Diabetes mellitus disorder' "
          where_sql = where_sql + "and diabetes.free_text_name like 'Diabetes mellitus%' "
        end
        if request[:diabetes].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                     "select conditions.patient_id " +
                                     "from conditions " +
@@ -268,23 +244,10 @@ class Report
      # see comment on diabetes query generation *rjm
      if request.has_key?(:hypertension)
        if request[:hypertension].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions hypertension"] == false
-           where_sql = where_sql + "hypertension.patient_id = patients.id "
-           where_tables["conditions hypertension"] = true
-         end
-         #where_sql = where_sql + "and hypertension.free_text_name = 'Essential hypertension disorder' "
          where_sql = where_sql + "and (hypertension.free_text_name like '%hypertension disorder%' "
          where_sql = where_sql + "or hypertension.free_text_name like '%Hypertensive disorder%' )"
        end
        if request[:hypertension].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                  "select conditions.patient_id " +
                                  "from conditions " +
@@ -298,22 +261,9 @@ class Report
      # see comment on diabetes query generation *rjm
      if request.has_key?(:ischemic_vascular_disease)
        if request[:ischemic_vascular_disease].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions ischemic_vascular_disease"] == false
-           where_sql = where_sql + "ischemic_vascular_disease.patient_id = patients.id "
-           where_tables["conditions ischemic_vascular_disease"] = true
-         end
-         #where_sql = where_sql + "and ischemic_vascular_disease.free_text_name = 'Ischemia disorder' "
          where_sql = where_sql + "and ischemic_vascular_disease.free_text_name like 'Ischemia %' "
        end
        if request[:ischemic_vascular_disease].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                  "select conditions.patient_id " +
                                  "from conditions " +
@@ -325,22 +275,9 @@ class Report
      # see comment on diabetes query generation *rjm
      if request.has_key?(:lipoid_disorder)
        if request[:lipoid_disorder].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions lipoid_disorder"] == false
-           where_sql = where_sql + "lipoid_disorder.patient_id = patients.id "
-           where_tables["conditions lipoid_disorder"] = true
-         end
-         #where_sql = where_sql + "and lipoid_disorder.free_text_name = 'Hyperlipoproteinemia disorder' "
          where_sql = where_sql + "and lipoid_disorder.free_text_name like 'Hyperlipoproteinemia %' "
        end
        if request[:lipoid_disorder].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                  "select conditions.patient_id " +
                                  "from conditions " +
@@ -362,30 +299,12 @@ class Report
        medications = request[:medications]
        medications.each do |next_medication|
          if next_medication == "Aspirin"
-           if where_tables["medications aspirin"] == false
-             if start_using_and_keyword == true
-               where_sql = where_sql + "and "
-             end
-             where_sql = where_sql + "aspirin.patient_id = patients.id "
-             where_tables["medications aspirin"] = true
-             start_using_and_keyword = true
-           end
            where_sql = where_sql + "and aspirin.product_code = 'R16CO5Y76E' "
          end
        end
      end
 
      if request.has_key?(:blood_pressures)
-       if where_tables["abstract_results diastolic"] == false
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         where_sql = where_sql + "diastolic.patient_id = patients.id "
-         where_sql = where_sql + "and diastolic.result_code = '8462-4' "
-         where_tables["abstract_results diastolic"] = true
-         start_using_and_keyword = true
-       end
-
        where_sql = where_sql + "and ("
        first_blood_pressure_query = true
        blood_pressure_requests = request[:blood_pressures]
@@ -419,16 +338,6 @@ class Report
      end
 
      if request.has_key?(:ldl_cholesterol)
-       if where_tables["abstract_results ldl_cholesterol"] == false
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         where_sql = where_sql + "ldl_cholesterol.patient_id = patients.id "
-         where_sql = where_sql + "and ldl_cholesterol.result_code = '18261-8' "
-         where_tables["abstract_results ldl_cholesterol"] = true
-         start_using_and_keyword = true
-       end
-
        where_sql = where_sql + "and ("
        first_ldl_query = true
        ldl_requests = request[:ldl_cholesterol]
@@ -459,21 +368,9 @@ class Report
 
      if request.has_key?(:colorectal_cancer_screening)
        if request[:colorectal_cancer_screening].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["abstract_results colorectal_cancer_screening"] == false
-           where_sql = where_sql + "colorectal_cancer_screening.patient_id = patients.id "
-           where_tables["abstract_results colorectal_cancer_screening"] = true
-         end
          where_sql = where_sql + "and colorectal_cancer_screening.result_code = '54047-6' "
        end
        if request[:colorectal_cancer_screening].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                     "select abstract_results.patient_id " +
                                     "from abstract_results " +
@@ -483,24 +380,12 @@ class Report
 
      if request.has_key?(:mammography)
        if request[:mammography].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["conditions mammography"] == false
-           where_sql = where_sql + "mammography.patient_id = patients.id "
-           where_tables["conditions mammography"] = true
-         end
          where_sql = where_sql + "and (mammography.free_text_name = 'Mammographic breast mass finding finding' "
          where_sql = where_sql + "or mammography.free_text_name = 'Mammography abnormal finding' "
          where_sql = where_sql + "or mammography.free_text_name = 'Mammography assessment Category 3    Probably benign finding short interval follow up finding' "
          where_sql = where_sql + "or mammography.free_text_name = 'Mammography normal finding') "
        end
        if request[:mammography].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                    "select conditions.patient_id " +
                                    "from conditions " +
@@ -513,25 +398,9 @@ class Report
 
      if request.has_key?(:influenza_vaccine)
        if request[:influenza_vaccine].include?("Yes")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
-         if where_tables["immunizations influenza_immunization"] == false
-           where_sql = where_sql + "influenza_immunization.patient_id = patients.id "
-           where_tables["immunizations influenza_immunization"] = true
-         end
-         if where_tables["vaccines influenza_vaccine"] == false
-           where_sql = where_sql + "and influenza_immunization.vaccine_id = influenza_vaccine.id "
-           where_tables["vaccines influenza_vaccine"] = true
-         end
          where_sql = where_sql + "and influenza_vaccine.name like 'Influenza Virus Vaccine%' "
        end
        if request[:influenza_vaccine].include?("No")
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         start_using_and_keyword = true
          where_sql = where_sql + "patients.id not in (" + 
                                     "select immunizations.patient_id " +
                                     "from immunizations, vaccines " +
@@ -541,15 +410,6 @@ class Report
      end
 
      if request.has_key?(:hb_a1c)
-       if where_tables["abstract_results hb_a1c"] == false
-         if start_using_and_keyword == true
-           where_sql = where_sql + "and "
-         end
-         where_sql = where_sql + "hb_a1c.patient_id = patients.id "
-         where_sql = where_sql + "and hb_a1c.result_code = '54039-3' "
-         where_tables["abstract_results hb_a1c"] = true
-         start_using_and_keyword = true
-       end
        where_sql = where_sql + "and ("
        first_hb_a1c_query = true
        hb_a1c_requests = request[:hb_a1c]
