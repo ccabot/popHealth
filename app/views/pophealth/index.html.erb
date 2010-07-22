@@ -14,14 +14,14 @@
 				
 			 var dataViewer = new popConnect.DataViewer('#main', {
 			     dataUrl: '/reports',
-			     reportId:  #{@report_id},
+			     reportId:  '#{@report_id}',
 			     exportLink: $('#exportReport')
 			   });
 
 			   var reportNavigator = new popConnect.ReportNavigator('#sidebar', {
 			     dataUrl: '/reports',
 			     dataViewer: dataViewer,
-			     reportId: #{@report_id}
+			     reportId: '#{@report_id}'
 			   });
 
 				$('.fancybox').fancybox({
