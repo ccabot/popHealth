@@ -9,7 +9,7 @@ class PatientsController < ApplicationController
   
   def initialize_reports
      @reports = Report.all_and_populate(:order => 'title asc')
-     @population_count = Patient.count_by_sql("select count(*) from patients").to_s
+     @population_count = Patient.count
      @population_name = "Sagacious Healthcare Services"
   end
   
@@ -46,7 +46,7 @@ class PatientsController < ApplicationController
             options[:offset] = count - options[:limit]
           end
         
-          {:data => Patient.find(:all, options), :count => count}
+          {:data => Patient.all(options), :count => count}
       }
       first = Report.first
       if !first.nil?
@@ -83,7 +83,7 @@ class PatientsController < ApplicationController
       return redirect_to @ret 
     end 
       
-    @patient = Patient.find_by_id(id.to_i)
+    @patient = Patient.find(id)
       
     if @patient.nil?
       flash[:error] = "The patient id (#{id}) did not return any results"
