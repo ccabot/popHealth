@@ -17,6 +17,14 @@ class Report
     YAML.load(@denominator_query)
   end
 
+  def numerator_hash=(raw)
+    @numerator_query = YAML.dump(raw)
+  end
+
+  def denominator_hash=(raw)
+    @denominator_query = YAML.dump(raw)
+  end
+
   def to_json_hash
     {:title => self.title,  :numerator => self.numerator, :denominator => self.denominator, :id => self.id,
       :numerator_fields => self.numerator_hash, :denominator_fields => self.denominator_hash}
@@ -36,8 +44,8 @@ class Report
     
     if params[:id].blank? && (params[:numerator].present? || params[:denominator].present? || params[:title].present?)
       report = Report.new
-      report.numerator_query = params[:numerator] || {}
-      report.denominator_query = params[:denominator] || {}
+      report.numerator_hash = params[:numerator] || {}
+      report.denominator_hash = params[:denominator] || {}
       report.title = params[:title] || "Untitled Report"
       if !params[:denominator].blank? 
         report.denominator = count_patients(report.denominator_hash)
@@ -48,14 +56,14 @@ class Report
     # create a blank report but don't save  
     elsif params[:id].blank? && params[:numerator].blank? && params[:denominator].blank? && params[:title].blank? 
       report = Report.new
-      report.numerator_query =  {}
-      report.denominator_query = {}
+      report.numerator_hash =  {}
+      report.denominator_hash = {}
       report.denominator = @@patient_count
       report.title = "Untitled Report"
     elsif params[:id] # update an existing report
       report = find(params[:id])
-      report.numerator_query = params[:numerator] || {}
-      report.denominator_query = params[:denominator] || {}
+      report.numerator_hash = params[:numerator] || {}
+      report.denominator_hash = params[:denominator] || {}
       report.title = params[:title] if params[:title]
       report.denominator = count_patients(report.denominator_hash)
     end
@@ -110,10 +118,10 @@ class Report
     
     load_static_content
     
-    report.denominator = (count_patients(report.denominator_query))
+    report.denominator = (count_patients(report.denominator_hash))
       # only run the numerator query if there are any fields provided
     if report.numerator_query.size > 0
-      temp_request = merge_popconnect_request(report.denominator_query, report.numerator_query)
+      temp_request = merge_popconnect_request(report.denominator_hash, report.numerator_hash)
       report.numerator = count_patients(temp_request)
       report.numerator_request = temp_request
     else
@@ -169,6 +177,7 @@ class Report
    def self.generate_population_query(request)
      query_conditions = {}
      query_js = []
+     where_sql = ''
 
      # FIXME 2010-07-22 ccabot this can probably be coded to use conditions instead of JS
      if request.has_key?(:gender)
@@ -221,8 +230,6 @@ class Report
        query_js << "( this.smoking_cessation.social_history_type_id=='#{@@tobacco_use_and_exposure.id.to_s}' )"
      end
 
-     where_sql = ''
-
      # OMG, please remind everyone that this is a feasibility demo... a.k.a. throwaway code!
      # If you are reading this comment and going WTF?, see me (McCready) and I'll buy you a
      # lunch as well as numerous shots of some form of alcholic liquid to explain what is 
@@ -244,17 +251,10 @@ class Report
      # see comment on diabetes query generation *rjm
      if request.has_key?(:hypertension)
        if request[:hypertension].include?("Yes")
-         where_sql = where_sql + "and (hypertension.free_text_name like '%hypertension disorder%' "
-         where_sql = where_sql + "or hypertension.free_text_name like '%Hypertensive disorder%' )"
+         query_conditions.merge! 'conditions.free_text_name' => /hypertension disorder/
        end
        if request[:hypertension].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                 "select conditions.patient_id " +
-                                 "from conditions " +
-                                 #"where conditions.free_text_name = 'Essential hypertension disorder') "
-                                 "where (conditions.free_text_name like '%hypertension disorder%' " + 
-                                 "or conditions.free_text_name like '%Hypertensive disorder%')) "
-
+         query_conditions.merge! 'conditions.free_text_name' => {'$not' => /hypertension disorder/}
        end
      end
 
@@ -305,36 +305,28 @@ class Report
      end
 
      if request.has_key?(:blood_pressures)
-       where_sql = where_sql + "and ("
-       first_blood_pressure_query = true
-       blood_pressure_requests = request[:blood_pressures]
-       blood_pressure_requests.each do |next_bp_query|
-         # or conditional query
-         if first_blood_pressure_query == false
-           where_sql = where_sql + "or "
-         end
-         first_blood_pressure_query = false
-
+       ranges = []
+       request[:blood_pressures].each do |next_bp_query|
          if next_bp_query == "110/70"
-           where_sql = where_sql + "(diastolic.value_scalar::varchar::text::int <= 74) "
+           ranges << {"value_scalar" => {'$lt' => 75}}
          end
          if next_bp_query == "120/80"
-           where_sql = where_sql + "(diastolic.value_scalar::varchar::text::int >= 75 "
-           where_sql = where_sql + "and diastolic.value_scalar::varchar::text::int <= 84) "
+           ranges << {"value_scalar" => {'$gte' => 75, '$lt' => 85}}
          end
          if next_bp_query == "140/90"
-           where_sql = where_sql + "(diastolic.value_scalar::varchar::text::int >= 85 "
-           where_sql = where_sql + "and diastolic.value_scalar::varchar::text::int <= 94) "
+           ranges << {"value_scalar" => {'$gte' => 85, '$lt' => 95}}
          end
          if next_bp_query == "160/100"
-           where_sql = where_sql + "(diastolic.value_scalar::varchar::text::int >= 95 "
-           where_sql = where_sql + "and diastolic.value_scalar::varchar::text::int <= 104) "
+           ranges << {"value_scalar" => {'$gte' => 95, '$lt' => 105}}
          end
          if next_bp_query == "180/110+"
-           where_sql = where_sql + "(diastolic.value_scalar::varchar::text::int >= 105) "
+           ranges << {"value_scalar" => {'$gte' => 105}}
          end
        end
-       where_sql = where_sql + ")"
+       if !ranges.empty?
+         bp_conditions = {'vital_signs'=> {'$elemMatch'=> {'result_code' => '8462-4', '$or' => ranges}}}
+         query_conditions.merge! bp_conditions
+       end
      end
 
      if request.has_key?(:ldl_cholesterol)
