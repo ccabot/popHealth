@@ -46,28 +46,17 @@ namespace :ph do
 
     count = $stdin.gets.to_i
 
-    puts "you have decided to create #{count} random patient records."
-    puts "hit ctrl + c to stop script at anytime."
-    puts "starting..."
-
     if count > 1000
       modulus = 100
     else
       modulus = 10
     end
 
-    i=0
-    while i<= count
-      begin
-        patient = Patient.new
-        patient.randomize()
-        patient.save!
-        i += 1
-        if i % modulus == 0
-          puts i.to_s + " patient records done ..." 
-        end
-      rescue
-        puts "ERROR creating patient " + i.to_s + ": "+ $!
+    count.times do |i|
+      Patient.new.randomize.save!
+      i += 1
+      if i % modulus == 0
+        puts "#{i} patient records done ..."
       end
     end
   end
