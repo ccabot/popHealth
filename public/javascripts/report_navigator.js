@@ -75,7 +75,7 @@ popConnect.ReportNavigator = function(element, options) {
   // Build the initial DOM containers
   // Set the domNode references too!
 	this.buildInitialDom = function() {
-		domReferences.busyIndicator = $('<div>').append($('<img>').attr('src', 'images/ajax-loader.gif').attr('alt', 'Loading')).append('<span>').text('Just a moment...').hide();
+		domReferences.busyIndicator = $('<div>').append($('<img>').attr('src', '/images/ajax-loader.gif').attr('alt', 'Loading')).append('<span>').text('Just a moment...').hide();
 
 		var populationStatsContainer = $('<div>').attr('id', 'info');
 		domReferences.populationCount = $('<h1>').text('0');
@@ -101,7 +101,7 @@ popConnect.ReportNavigator = function(element, options) {
 
 		rootElement.append(domReferences.navContent).append(domReferences.busyIndicator);
 
-		var reporticon = $('<img>').attr("src","stylesheets/reporticon.png").addClass('boom').hide();
+		var reporticon = $('<img>').attr("src","/stylesheets/reporticon.png").addClass('boom').hide();
 		$('body').append(reporticon); this.buildreports(reporticon);
 
 	};

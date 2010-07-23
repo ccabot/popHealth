@@ -576,7 +576,7 @@ popConnect.DataViewer = function(element, options) {
     busyness++;
 
     if(busyness > 0) { // Only show the loading indicator if it's not already showing
-      rootElement.block({ message: '<img src="images/ajax-loader.gif" alt="loading" /><h2>Just a moment...</h2>',overlayCSS: { backgroundColor: '#ccc' }, css: {padding: '25px'}  });
+      rootElement.block({ message: '<img src="/images/ajax-loader.gif" alt="loading" /><h2>Just a moment...</h2>',overlayCSS: { backgroundColor: '#ccc' }, css: {padding: '25px'}  });
     }
   };
 
