@@ -90,7 +90,7 @@ class ReportsController < ApplicationController
   end
   
   def pqri_report
-    @report = Report.find(params[:id])
+    @report = Report.find_and_populate(params[:id])
     render 'pqri_report.xml', :layout => false
   end
 
