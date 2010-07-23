@@ -22,7 +22,7 @@ class PatientsController < ApplicationController
     #TODO: abstract this out into a module for active record. 
     if @report_id.nil? || @report_id == ""
     
-      query = Report.find_and_generate_patients_query(params[:report_id], "")
+      query = Report.find_and_generate_patients_query params[:report_id]
       if !query.nil?
         @report_id = params[:report_id]
         @list = UI::PaginatedResults.wrap(:patients, params) { |options|

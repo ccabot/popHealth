@@ -130,12 +130,12 @@ class Report
     return report
   end
   
-  def self.find_and_generate_patients_query(id, prepend_sql = "")
+  def self.find_and_generate_patients_query(id)
       report = find_and_populate(id)
       if report.nil?
         return nil
       end
-      return generate_population_query(report.numerator_request, prepend_sql)
+      return generate_population_query(report.numerator_request)
   end
   
   def self.count_patients(report_request, load = false)
@@ -177,7 +177,6 @@ class Report
    def self.generate_population_query(request)
      query_conditions = {}
      query_js = []
-     where_sql = ''
 
      # FIXME 2010-07-22 ccabot this can probably be coded to use conditions instead of JS
      if request.has_key?(:gender)
@@ -225,30 +224,19 @@ class Report
        !ranges.empty? && query_conditions.merge!({'$or' => ranges})
      end
 
-     # FIXME 2010-07-22 ccabot this can probably be coded to use conditions instead of JS
      if request.has_key?(:therapies) && request[:therapies].include?("Smoking Cessation")
-       query_js << "( this.smoking_cessation.social_history_type_id=='#{@@tobacco_use_and_exposure.id.to_s}' )"
+       query_conditions.merge! 'social_history.social_history_type_id' => @@tobacco_use_and_exposure.id
      end
 
-     # OMG, please remind everyone that this is a feasibility demo... a.k.a. throwaway code!
-     # If you are reading this comment and going WTF?, see me (McCready) and I'll buy you a
-     # lunch as well as numerous shots of some form of alcholic liquid to explain what is 
-     # going on here, and why I am working a Sunday... pissed that named scopes completely 
-     # failed me on the popHealth work...  So sorry!!!
      if request.has_key?(:diabetes)
        if request[:diabetes].include?("Yes")
-         where_sql = where_sql + "and diabetes.free_text_name like 'Diabetes mellitus%' "
+         query_conditions.merge! 'conditions.free_text_name' => /^Diabetes mellitus/
        end
        if request[:diabetes].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                    "select conditions.patient_id " +
-                                    "from conditions " +
-                                    #"where conditions.free_text_name = 'Diabetes mellitus disorder') "
-                                  "where conditions.free_text_name like 'Diabetes mellitus%')"
+         query_conditions.merge! 'conditions.free_text_name' => {'$not' => /^Diabetes mellitus/}
        end
      end
 
-     # see comment on diabetes query generation *rjm
      if request.has_key?(:hypertension)
        if request[:hypertension].include?("Yes")
          query_conditions.merge! 'conditions.free_text_name' => /hypertension disorder/
@@ -258,31 +246,21 @@ class Report
        end
      end
 
-     # see comment on diabetes query generation *rjm
      if request.has_key?(:ischemic_vascular_disease)
        if request[:ischemic_vascular_disease].include?("Yes")
-         where_sql = where_sql + "and ischemic_vascular_disease.free_text_name like 'Ischemia %' "
+         query_conditions.merge! 'conditions.free_text_name' => /^Ischemia /
        end
        if request[:ischemic_vascular_disease].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                 "select conditions.patient_id " +
-                                 "from conditions " +
-                                 #"where conditions.free_text_name = 'Ischemia disorder') "
-                                 "where conditions.free_text_name like 'Ischemia %') "
+         query_conditions.merge! 'conditions.free_text_name' => {'$not' => /^Ischemia /}
        end
      end
 
-     # see comment on diabetes query generation *rjm
      if request.has_key?(:lipoid_disorder)
        if request[:lipoid_disorder].include?("Yes")
-         where_sql = where_sql + "and lipoid_disorder.free_text_name like 'Hyperlipoproteinemia %' "
+         query_conditions.merge! 'conditions.free_text_name' => /^Hyperlipoproteinemia /
        end
        if request[:lipoid_disorder].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                 "select conditions.patient_id " +
-                                 "from conditions " +
-                                 #"where conditions.free_text_name = 'Hyperlipoproteinemia disorder') "
-                                 "where conditions.free_text_name like 'Hyperlipoproteinemia %') "
+         query_conditions.merge! 'conditions.free_text_name' => {'$not' => /^Hyperlipoproteinemia /}
        end
      end
 
@@ -299,7 +277,7 @@ class Report
        medications = request[:medications]
        medications.each do |next_medication|
          if next_medication == "Aspirin"
-           where_sql = where_sql + "and aspirin.product_code = 'R16CO5Y76E' "
+           query_conditions.merge! 'medications.product_code' => 'R16CO5Y76E'
          end
        end
      end
@@ -324,106 +302,75 @@ class Report
          end
        end
        if !ranges.empty?
-         bp_conditions = {'vital_signs'=> {'$elemMatch'=> {'result_code' => '8462-4', '$or' => ranges}}}
-         query_conditions.merge! bp_conditions
+         query_conditions.merge!({'vital_signs'=> {'$elemMatch'=> {'result_code' => '8462-4', '$or' => ranges}}})
        end
      end
 
      if request.has_key?(:ldl_cholesterol)
-       where_sql = where_sql + "and ("
-       first_ldl_query = true
-       ldl_requests = request[:ldl_cholesterol]
-       ldl_requests.each do |next_ldl_query|
-         # or conditional query
-         if first_ldl_query == false
-           where_sql = where_sql + "or "
-         end
-         first_ldl_query = false
-
+       ranges = []
+       request[:ldl_cholesterol].each do |next_ldl_query|
          if next_ldl_query == "100"
-           where_sql = where_sql + "(ldl_cholesterol.value_scalar::varchar::text::int <= 100) "
+           ranges << {"value_scalar" => {'$lt' => 101}}
          elsif next_ldl_query == "100-120"
-           where_sql = where_sql + "(ldl_cholesterol.value_scalar::varchar::text::int > 100 "
-           where_sql = where_sql + "and ldl_cholesterol.value_scalar::varchar::text::int <= 120) "
+           ranges << {"value_scalar" => {'$gte' => 101, '$lt' => 121}}
          elsif next_ldl_query == "130-160"
-           where_sql = where_sql + "(ldl_cholesterol.value_scalar::varchar::text::int > 130 "
-           where_sql = where_sql + "and ldl_cholesterol.value_scalar::varchar::text::int <= 160) "
+           ranges << {"value_scalar" => {'$gte' => 131, '$lt' => 161}}
          elsif next_ldl_query == "160-180"
-           where_sql = where_sql + "(ldl_cholesterol.value_scalar::varchar::text::int > 160 "
-           where_sql = where_sql + "and ldl_cholesterol.value_scalar::varchar::text::int <= 180) "
+           ranges << {"value_scalar" => {'$gte' => 161, '$lt' => 181}}
          elsif next_ldl_query == "180+"
-           where_sql = where_sql + "(ldl_cholesterol.value_scalar::varchar::text::int > 180) "
+           ranges << {"value_scalar" => {'$gte' => 181}}
          end
        end
-       where_sql = where_sql + ")"
+       if !ranges.empty?
+         bp_conditions =
+         query_conditions.merge!({'results'=> {'$elemMatch'=> {'result_code' => '18261-8', '$or' => ranges}}})
+       end
      end
 
      if request.has_key?(:colorectal_cancer_screening)
        if request[:colorectal_cancer_screening].include?("Yes")
-         where_sql = where_sql + "and colorectal_cancer_screening.result_code = '54047-6' "
+         query_conditions.merge! 'results.result_code' => '54047-6'
        end
        if request[:colorectal_cancer_screening].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                    "select abstract_results.patient_id " +
-                                    "from abstract_results " +
-                                    "where abstract_results.result_code = '54047-6') "
+         query_conditions.merge! 'results.result_code' => {'$not' => /^54047-6$/}
        end
      end
 
      if request.has_key?(:mammography)
        if request[:mammography].include?("Yes")
-         where_sql = where_sql + "and (mammography.free_text_name = 'Mammographic breast mass finding finding' "
-         where_sql = where_sql + "or mammography.free_text_name = 'Mammography abnormal finding' "
-         where_sql = where_sql + "or mammography.free_text_name = 'Mammography assessment Category 3    Probably benign finding short interval follow up finding' "
-         where_sql = where_sql + "or mammography.free_text_name = 'Mammography normal finding') "
+         query_conditions.merge! 'conditions.free_text_name' => { '$in' => [/Mammographic breast mass finding/, /Mammography abnormal finding/, /Mammography assessment Category 3    Probably benign finding short interval follow up finding/, /Mammography normal finding/]}
        end
        if request[:mammography].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                   "select conditions.patient_id " +
-                                   "from conditions " +
-                                   "where (conditions.free_text_name = 'Mammographic breast mass finding finding' " +
-                                   "or conditions.free_text_name = 'Mammography abnormal finding' " + 
-                                   "or conditions.free_text_name = 'Mammography assessment Category 3    Probably benign finding short interval follow up finding' " + 
-                                   "or conditions.free_text_name = 'Mammography normal finding')) "
+         query_conditions.merge! 'conditions.free_text_name' => {'$nin' => [/Mammographic breast mass finding/, /Mammography abnormal finding/, /Mammography assessment Category 3    Probably benign finding short interval follow up finding/, /Mammography normal finding/]}
        end
      end
 
      if request.has_key?(:influenza_vaccine)
+       flu_vac = Vaccine.first 'name' => /^Influenza Virus Vaccine/
        if request[:influenza_vaccine].include?("Yes")
-         where_sql = where_sql + "and influenza_vaccine.name like 'Influenza Virus Vaccine%' "
+         query_conditions.merge! 'immunizations.vaccine_id' => flu_vac.id
        end
        if request[:influenza_vaccine].include?("No")
-         where_sql = where_sql + "patients.id not in (" + 
-                                    "select immunizations.patient_id " +
-                                    "from immunizations, vaccines " +
-                                    "where immunizations.vaccine_id = vaccines.id " +
-                                    "and vaccines.name like 'Influenza Virus Vaccine%') "
+         query_conditions.merge! 'immunizations.vaccine_id' => {'$nin' => [flu_vac.id]}
        end
      end
 
      if request.has_key?(:hb_a1c)
-       where_sql = where_sql + "and ("
-       first_hb_a1c_query = true
-       hb_a1c_requests = request[:hb_a1c]
-       hb_a1c_requests.each do |next_hb_a1c_query|
-         # or conditional query
-         if first_hb_a1c_query == false
-           where_sql = where_sql + "or "
-         end
-         first_hb_a1c_query = false
+       ranges = []
+       request[:hb_a1c].each do |next_hb_a1c_query|
          if next_hb_a1c_query == "<7"
-           where_sql = where_sql + "(hb_a1c.value_scalar::varchar::text::int <= 7) "
+           ranges << {"value_scalar" => {'$lt' => 7}}
          elsif next_hb_a1c_query == "7-8"
-           where_sql = where_sql + "(hb_a1c.value_scalar::varchar::text::int > 7 "
-           where_sql = where_sql + "and hb_a1c.value_scalar::varchar::text::int <= 8) "
+           ranges << {"value_scalar" => {'$gte' => 7, '$lt' => 9}}
          elsif next_hb_a1c_query == "8-9"
-           where_sql = where_sql + "(hb_a1c.value_scalar::varchar::text::int > 8 "
-           where_sql = where_sql + "and hb_a1c.value_scalar::varchar::text::int <= 9) "
+           ranges << {"value_scalar" => {'$gte' => 8, '$lt' => 10}}
          elsif next_hb_a1c_query == "9+"
-           where_sql = where_sql + "(hb_a1c.value_scalar::varchar::text::int > 9) "
+           ranges << {"value_scalar" => {'$gte' => 9}}
          end
        end
-       where_sql = where_sql + ")"
+       if !ranges.empty?
+         query_conditions.merge!({'results'=> {'$elemMatch'=> {'result_code' => '54039-3', '$or' => ranges}}})
+       end
      end
 
      query_conditions.merge!('$where' => query_js.join('&&')) if !query_js.empty?
