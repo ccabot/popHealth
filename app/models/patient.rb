@@ -9,6 +9,7 @@ class Patient
 
   key :name, String
   key :pregnant, Boolean
+  timestamps!
 
   has_many_c32 :languages
   has_many_c32 :providers
