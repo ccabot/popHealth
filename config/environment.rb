@@ -46,11 +46,6 @@ Rails::Initializer.run do |config|
   #  :secret      => '451d52461398c0186576b60fc40b9c8304fb1b38a8f6dce0e6ec564fc7c16687db8d468681bc7053901c56c6ae2e2e394a7631e9f95ea52b4fc69d0e6e5a58a2'
   # }
 
-  # Use the database for sessions instead of the cookie-based default,
-  # which shouldn't be used to store highly confidential information
-  # (create the session table with 'rake db:sessions:create')
-  config.action_controller.session_store = :active_record_store
-
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
